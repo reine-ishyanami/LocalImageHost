@@ -1,17 +1,14 @@
 package com.reine.filebed.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.reine.filebed.entity.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -128,8 +125,7 @@ public class FileUtils {
                 conn.disconnect();
             }
         }
-        Result result = JSONObject.parseObject(res, Result.class);
-        return result;
+        return JSONObject.parseObject(res, Result.class);
     }
 
     public static Result delete(String projectAndFileName) {
