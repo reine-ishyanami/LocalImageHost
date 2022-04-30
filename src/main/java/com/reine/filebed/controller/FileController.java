@@ -116,6 +116,7 @@ public class FileController {
      */
     @DeleteMapping("/delete/{project}/{imgName}")
     public Result deleteImage(@PathVariable String project, @PathVariable String imgName) {
+        System.err.println("执行了删除操作");
         String filePath = localStore + "//" + project + "//" + imgName;
         File file = new File(filePath);
         if (!file.exists()) {
