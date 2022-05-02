@@ -7,10 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.UUID;
 
 /**
  * 图片存储控制器
+ *
  * @author reine
  * @since 2022/4/30 8:41
  */
@@ -29,20 +29,16 @@ public class FileController {
      */
     @PostMapping("/upload/{project}")
     public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) {
-        // 重新生成文件名
-        String originalFilename = imgFile.getOriginalFilename();
-        int index = originalFilename.lastIndexOf(".");
-        String extensionName = originalFilename.substring(index - 1);
-        String fileName = UUID.randomUUID() + extensionName;
-
+        // 获取文件名
+        String filename = imgFile.getOriginalFilename();
         // 判断文件夹是否存在，不存在则创建文件夹
         String storePath = localStore + project;
         File dir = new File(storePath);
         if (!dir.exists()) {
-            dir.mkdirs();
+            boolean mkdirs = dir.mkdirs();
         }
         // 拼接文件路径
-        String filePath = storePath + "//" + fileName;
+        String filePath = storePath + "//" + filename;
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
@@ -61,13 +57,17 @@ public class FileController {
             return new Result(500, "上传失败", null);
         } finally {
             try {
-                outputStream.close();
-                inputStream.close();
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return new Result(200, "上传成功", project + "/" + fileName);
+        return new Result(200, "上传成功", project + "/" + filename);
     }
 
     /**
@@ -87,24 +87,28 @@ public class FileController {
             int i = inputStream.available();
             //byte数组用于存放图片字节数据
             byte[] buffer = new byte[i];
-            inputStream.read(buffer);
+            int read = inputStream.read(buffer);
             //设置发送到客户端的响应内容类型
             response.setContentType("image/*");
             outputStream = response.getOutputStream();
             outputStream.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
-            return new Result(500,"图片展示失败",null);
+            return new Result(500, "图片展示失败", null);
 
         } finally {
             try {
-                outputStream.close();
-                inputStream.close();
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return new Result(200,"图片展示成功",null);
+        return new Result(200, "图片展示成功", null);
     }
 
     /**
@@ -122,7 +126,7 @@ public class FileController {
         if (!file.exists()) {
             return new Result(500, "图片不存在", null);
         } else {
-            file.delete();
+            boolean delete = file.delete();
             return new Result(500, "图片删除成功", null);
         }
     }
