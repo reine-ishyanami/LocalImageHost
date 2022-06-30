@@ -5,11 +5,13 @@ import com.reine.filebed.service.FileService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 
@@ -58,6 +60,9 @@ public class Main {
     void uploadFile(ActionEvent event) {
         String projectText = tfProject.getText();
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-border-color: #ff9999; -fx-border-width: 3;");
+        alert.initStyle(StageStyle.UNDECORATED);
         alert.setHeaderText("错误");
         if (projectText.trim().equals("")) {
             alert.setContentText("项目名不能为空");
