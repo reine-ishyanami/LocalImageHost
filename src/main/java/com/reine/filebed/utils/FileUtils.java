@@ -2,6 +2,7 @@ package com.reine.filebed.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.reine.filebed.entity.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @author reine
  * @since 2022/4/30 15:40
  */
+@Slf4j
 public class FileUtils {
 
     /**
@@ -89,7 +91,7 @@ public class FileUtils {
                 strBuf.append("Content-Disposition: form-data; name=\""
                         + "imgFile" + "\"; filename=\"" + fileName
                         + "\"\r\n");
-                System.out.println("imgFile" + "," + fileName);
+                log.info("fileName---{}", fileName);
 
                 strBuf.append("Content-Type:" + contentType + "\r\n\r\n");
                 out.write(strBuf.toString().getBytes());
@@ -118,7 +120,7 @@ public class FileUtils {
             res = strBuf.toString();
             reader.close();
         } catch (Exception e) {
-            System.out.println("发送POST请求出错。" + urlStr);
+            log.info("urlStr---{}", urlStr);
             e.printStackTrace();
         } finally {
             if (conn != null) {

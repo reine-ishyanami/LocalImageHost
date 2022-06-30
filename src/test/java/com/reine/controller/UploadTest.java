@@ -2,6 +2,7 @@ package com.reine.controller;
 
 import com.reine.filebed.entity.Result;
 import com.reine.filebed.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,7 @@ import java.io.*;
  * @author reine
  * @since 2022/4/30 15:10
  */
+@Slf4j
 public class UploadTest {
 
     /**
@@ -23,13 +25,13 @@ public class UploadTest {
         FileInputStream inputStream = new FileInputStream(file);
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), inputStream);
         Result test = FileUtils.upload("test", multipartFile);
-        System.out.println(test.getProjectAndFileName());
+        log.info("test.getProjectAndFileName()---{}", test.getProjectAndFileName());
     }
 
     @Test
-    public void testDeleteUtils(){
+    public void testDeleteUtils() {
         Result test = FileUtils.delete("");
-        System.out.println(test.getMessage());
+        log.info("test.getMessage---{}", test.getMessage());
     }
 
 }
