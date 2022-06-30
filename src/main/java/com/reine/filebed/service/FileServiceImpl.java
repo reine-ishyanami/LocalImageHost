@@ -40,7 +40,7 @@ public class FileServiceImpl implements FileService {
         FileOutputStream outputStream = null;
         int i = imgFile.getPath().indexOf(":");
         String Realpath = imgFile.getPath().substring(i + 2);
-        log.info("Realpath---{}",Realpath);
+        log.info("Realpath---{}", Realpath);
         try {
             inputStream = Files.newInputStream(Paths.get(Realpath));
             outputStream = new FileOutputStream(file);
@@ -98,8 +98,6 @@ public class FileServiceImpl implements FileService {
             //byte数组用于存放图片字节数据
             byte[] buffer = new byte[i];
             int read = inputStream.read(buffer);
-            //设置发送到客户端的响应内容类型
-            response.setContentType("image/*");
             outputStream = response.getOutputStream();
             outputStream.write(buffer);
         } catch (IOException e) {
