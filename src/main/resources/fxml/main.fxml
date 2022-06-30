@@ -15,7 +15,7 @@
     <center>
         <StackPane onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" prefHeight="150.0" prefWidth="200.0"
                    BorderPane.alignment="CENTER">
-            <Label text="Dragged File" textFill="#0000005c">
+            <Label text="拖拽图片到此处" textFill="#0000005c">
                 <font>
                     <Font size="35.0"/>
                 </font>
@@ -27,9 +27,9 @@
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                 <TextField fx:id="tfProject" prefHeight="30.0" prefWidth="398.0"/>
-                <Button mnemonicParsing="false" onAction="#uploadFile" text="UPLOAD"/>
+                <Button mnemonicParsing="false" onAction="#uploadFile" text="上传"/>
             </HBox>
-            <Label fx:id="lbInfo" textFill="#1820ba"/>
+            <TextField fx:id="tfInfo" editable="false" visible="false"/>
         </VBox>
     </bottom>
 </BorderPane>

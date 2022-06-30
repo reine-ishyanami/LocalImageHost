@@ -4,7 +4,7 @@ import com.reine.filebed.LocalFilebedApplication;
 import com.reine.filebed.service.FileService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +23,7 @@ public class Main {
     private TextField tfProject;
 
     @FXML
-    private Label lbInfo;
+    private TextField tfInfo;
 
     @FXML
     private ImageView ivImage;
@@ -57,10 +57,23 @@ public class Main {
     @FXML
     void uploadFile(ActionEvent event) {
         String projectText = tfProject.getText();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("错误");
+        if (projectText.trim().equals("")) {
+            alert.setContentText("项目名不能为空");
+            alert.show();
+            return;
+        } else if (file == null) {
+            alert.setContentText("图片不能为空");
+            alert.show();
+            return;
+        }
         fileService = (FileService) LocalFilebedApplication.APPLICATION_CONTEXT.getBean("fileServiceImpl");
         String s = fileService.storeImage(projectText, file);
         if (s != null) {
-            lbInfo.setText("http://localhost:8824" + s);
+            tfInfo.setVisible(true);
+            tfInfo.setText("http://localhost:8824/view" + s);
         }
     }
+
 }

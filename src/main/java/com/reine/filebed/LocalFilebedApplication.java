@@ -28,7 +28,7 @@ public class LocalFilebedApplication extends Application {
         Pane root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getClassLoader().getResource("fxml/main.fxml")));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Upload Image");
+        primaryStage.setTitle("上传图片");
         primaryStage.setResizable(false);
         primaryStage.centerOnScreen();
         primaryStage.show();

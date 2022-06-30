@@ -44,7 +44,7 @@ public class FileController {
      * @param imgName 图片名称
      * @return 成功或失败信息
      */
-    @GetMapping("/download/{project}/{imgName}")
+    @GetMapping("/view/{project}/{imgName}")
     public Result showImage(@PathVariable String project, @PathVariable String imgName, HttpServletResponse response) {
         boolean flag = fileService.showImage(project, imgName, response);
         if (flag) {
