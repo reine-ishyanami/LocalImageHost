@@ -3,7 +3,7 @@ package com.reine.filebed;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +29,8 @@ public class LocalFilebedApplication extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("上传图片");
+        Image image = new Image("images/logo.png");
+        primaryStage.getIcons().add(image);
         primaryStage.setResizable(false);
         primaryStage.centerOnScreen();
         primaryStage.show();
