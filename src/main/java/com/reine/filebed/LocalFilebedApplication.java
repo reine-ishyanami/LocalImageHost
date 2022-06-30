@@ -41,4 +41,11 @@ public class LocalFilebedApplication extends Application {
         super.init();
         APPLICATION_CONTEXT = SpringApplication.run(LocalFilebedApplication.class, args);
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        // 关闭Web应用
+        SpringApplication.exit(APPLICATION_CONTEXT);
+    }
 }
