@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 import java.io.File;
 
@@ -63,6 +64,8 @@ public class Main {
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.setStyle("-fx-border-color: #ff9999; -fx-border-width: 3;");
         alert.initStyle(StageStyle.UNDECORATED);
+        Window window = tfInfo.getScene().getWindow();
+        alert.initOwner(window);
         alert.setHeaderText("错误");
         if (projectText.trim().equals("")) {
             alert.setContentText("项目名不能为空");
