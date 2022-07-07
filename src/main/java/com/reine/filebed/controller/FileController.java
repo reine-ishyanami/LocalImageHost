@@ -30,10 +30,10 @@ public class FileController {
      * @return 成功或失败信息
      */
     @PostMapping("/upload/{project}")
-    public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) {
+    public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) throws Exception {
         File file = transferToFile(imgFile);
         String fileName = imgFile.getOriginalFilename();
-        String s = fileService.storeImage(project, file, fileName);
+        String s = fileService.storeImageAPI(project, file, fileName);
         return new Result(2001, "上传成功", s);
     }
 

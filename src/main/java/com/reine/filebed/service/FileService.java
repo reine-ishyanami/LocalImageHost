@@ -9,22 +9,23 @@ import java.io.File;
  */
 public interface FileService {
     /**
-     * 文件上传
+     * GUI文件上传
      *
      * @param project 项目名
      * @param imgFile 文件
      * @return 文件访问地址
      */
-    String storeImage(String project, File imgFile);
+    String storeImageGUI(String path, String project, File imgFile) throws Exception;
+
     /**
-     * 文件上传
+     * RestAPI文件上传
      *
-     * @param project 项目名
-     * @param imgFile 文件
+     * @param project  项目名
+     * @param imgFile  文件
      * @param fileName 文件名
      * @return 文件访问地址
      */
-    String storeImage(String project, File imgFile,String fileName);
+    String storeImageAPI(String project, File imgFile, String fileName) throws Exception;
 
     /**
      * 读取图片
@@ -43,5 +44,12 @@ public interface FileService {
      * @param imgName 图片名
      * @return 是否成功
      */
-    boolean deleteImage( String project, String imgName);
+    boolean deleteImage(String project, String imgName);
+
+    /**
+     * 创建数据库
+     */
+    void createTable();
+
+
 }

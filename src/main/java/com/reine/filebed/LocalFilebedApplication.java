@@ -1,5 +1,6 @@
 package com.reine.filebed;
 
+import com.reine.filebed.fxml.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ public class LocalFilebedApplication extends Application {
 
     private static String[] args;
 
+
     public static void main(String[] args) {
         LocalFilebedApplication.args = args;
         launch(args);
@@ -25,7 +27,9 @@ public class LocalFilebedApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getClassLoader().getResource("fxml/main.fxml")));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(Objects.requireNonNull(this.getClass().getClassLoader().getResource("fxml/main.fxml")));
+        Pane root = fxmlLoader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("上传图片");
@@ -34,6 +38,10 @@ public class LocalFilebedApplication extends Application {
         primaryStage.setResizable(false);
         primaryStage.centerOnScreen();
         primaryStage.show();
+
+        // 获取其布局控制器
+        Main controller = fxmlLoader.getController();
+        controller.initData();
     }
 
     @Override

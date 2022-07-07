@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.reine.filebed.mapper.ImgMapper">
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS "imgUrl"
+        (
+            "id"      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            "path"    TEXT    NOT NULL,
+            "project" TEXT    NOT NULL,
+            "name"    TEXT    NOT NULL
+        );
+
+        CREATE UNIQUE INDEX "imgPath"
+            ON "imgUrl" (
+                         "name" ASC,
+                         "project"
+                );
+    </update>
+    <delete id="deleteImg">
+        DELETE
+        FROM "imgUrl"
+        WHERE project = "${project}"
+          and name = "${name}"
+    </delete>
+    <select id="getPath" resultType="java.lang.String">
+        SELECT path
+        FROM "imgUrl"
+        WHERE project = "${project}"
+          and name = "${name}"
+    </select>
+    <insert id="storeImg" parameterType="com.reine.filebed.entity.Image">
+        INSERT INTO "imgUrl"(path, project, name)
+        VALUES ("${path}", "${project}", "${name}")
+    </insert>
+</mapper>

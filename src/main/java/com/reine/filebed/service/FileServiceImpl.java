@@ -1,9 +1,13 @@
 package com.reine.filebed.service;
 
+import com.reine.filebed.entity.Image;
+import com.reine.filebed.mapper.ImgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
@@ -16,26 +20,33 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class FileServiceImpl implements FileService {
 
     @Value("${local.store}")
     private String localStore;
 
+    @Resource
+    private ImgMapper imgMapper;
+
     @Override
-    public String storeImage(String project, File imgFile) {
-        String filename = imgFile.getName();
-        String storePath = localStore + project;
+    public String storeImageGUI(String path, String project, File imgFile) throws Exception {
+        String fileName = imgFile.getName();
+        String storePath = path + "\\" + project;
         File dir = new File(storePath);
-        if (!dir.exists()) {
-            boolean mkdirs = dir.mkdirs();
-        }
         // 拼接文件路径
-        String filePath = storePath + "//" + filename;
+        String filePath = storePath + "\\" + fileName;
+        File file = new File(filePath);
+        if (uploadImage(file, project, fileName)) {
+            throw new Exception("插入数据库失败");
+        }
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
         int len;
-        File file = new File(filePath);
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         int i = imgFile.getPath().indexOf(":");
@@ -49,27 +60,31 @@ public class FileServiceImpl implements FileService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new Exception("写入文件失败");
         } finally {
             closeStream(inputStream, outputStream);
         }
-        return "/" + project + "/" + filename;
+        log.info("file.getAbsolutePath()---{}", file.getAbsolutePath());
+        return "/" + project + "/" + fileName;
     }
 
     @Override
-    public String storeImage(String project, File imgFile, String fileName) {
+    public String storeImageAPI(String project, File imgFile, String fileName) throws Exception {
         String storePath = localStore + project;
         File dir = new File(storePath);
-        if (!dir.exists()) {
-            boolean mkdirs = dir.mkdirs();
-        }
         // 拼接文件路径
-        String filePath = storePath + "//" + fileName;
+        String filePath = storePath + "\\" + fileName;
+        File file = new File(filePath);
+        if (uploadImage(file, project, fileName)) {
+            throw new Exception("插入数据库失败");
+        }
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
         int len;
-        File file = new File(filePath);
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
@@ -80,16 +95,17 @@ public class FileServiceImpl implements FileService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new Exception("写入文件失败");
         } finally {
             closeStream(inputStream, outputStream);
         }
+        log.info("file.getAbsolutePath()---{}", file.getAbsolutePath());
         return "/" + project + "/" + fileName;
     }
 
     @Override
     public boolean showImage(String project, String imgName, HttpServletResponse response) {
-        String filePath = localStore + project + "//" + imgName;
+        String filePath = getPath(project, imgName);
         FileInputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -97,7 +113,7 @@ public class FileServiceImpl implements FileService {
             int i = inputStream.available();
             //byte数组用于存放图片字节数据
             byte[] buffer = new byte[i];
-            int read = inputStream.read(buffer);
+            inputStream.read(buffer);
             outputStream = response.getOutputStream();
             outputStream.write(buffer);
         } catch (IOException e) {
@@ -111,14 +127,19 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public boolean deleteImage(String project, String imgName) {
-        String filePath = localStore + project + "//" + imgName;
+        String filePath = getPath(project, imgName);
         File file = new File(filePath);
         if (!file.exists()) {
             return false;
         } else {
-            boolean delete = file.delete();
-            return true;
+            file.delete();
+            return deleteImageInfo(project, imgName);
         }
+    }
+
+    @Override
+    public void createTable() {
+        imgMapper.createTable();
     }
 
     /**
@@ -142,5 +163,55 @@ public class FileServiceImpl implements FileService {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    /**
+     * 插入图片路径名称匹配数据到数据库
+     *
+     * @param file    生成的文件
+     * @param project 项目名
+     * @param name    文件名
+     * @return 成功标志
+     */
+    private boolean uploadImage(File file, String project, String name) throws Exception {
+        Integer integer;
+        try {
+            // 如果存在则先删除
+            String path = imgMapper.getPath(project, name);
+            if (path != null) {
+                imgMapper.deleteImg(project, name);
+            }
+            Image image = new Image();
+            image.setPath(file.getAbsolutePath());
+            image.setName(name);
+            image.setProject(project);
+            integer = imgMapper.storeImg(image);
+        } catch (Exception e) {
+            throw new Exception("插入数据失败");
+        }
+        return integer == null;
+    }
+
+    /**
+     * 获取图片路径
+     *
+     * @param project  项目名
+     * @param fileName 图片名
+     * @return 图片路径
+     */
+    private String getPath(String project, String fileName) {
+        return imgMapper.getPath(project, fileName);
+    }
+
+    /**
+     * 删除数据库中的图片信息
+     *
+     * @param project  项目名
+     * @param fileName 文件名
+     * @return 成功标志
+     */
+    private boolean deleteImageInfo(String project, String fileName) {
+        Integer integer = imgMapper.deleteImg(project, fileName);
+        return integer != null;
     }
 }
