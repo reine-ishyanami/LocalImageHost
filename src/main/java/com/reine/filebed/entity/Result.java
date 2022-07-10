@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
  * 返回结果类
+ *
  * @author reine
  * @since 2022/4/30 8:44
  */
@@ -18,6 +21,6 @@ public class Result {
 
     private String message;
 
-    private String projectAndFileName;
+    private Map<String, String> resultMap;
 
 }

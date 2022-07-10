@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -30,7 +32,7 @@ public class FileServiceImpl implements FileService {
     private ImgMapper imgMapper;
 
     @Override
-    public String storeImageGUI(String path, String project, File imgFile) throws Exception {
+    public Map<String, String> storeImageGUI(String path, String project, File imgFile) throws Exception {
         String fileName = imgFile.getName();
         String storePath = path + "\\" + project;
         // 拼接文件路径
@@ -41,14 +43,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String storeImageAPI(String project, File imgFile, String fileName) throws Exception {
+    public Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
         String storePath = localStore + project;
         File file = createFile(project, fileName, storePath);
         String Realpath = imgFile.getAbsolutePath();
         return copyFileAndGetUrl(project, fileName, file, Realpath);
     }
 
-    private String copyFileAndGetUrl(String project, String fileName, File file, String Realpath) throws Exception {
+    private Map<String, String> copyFileAndGetUrl(String project, String fileName, File file, String Realpath) throws Exception {
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
@@ -67,7 +69,10 @@ public class FileServiceImpl implements FileService {
         } finally {
             closeStream(inputStream, outputStream);
         }
-        return "/" + project + "/" + fileName;
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("project", project);
+        resultMap.put("fileName", fileName);
+        return resultMap;
     }
 
     private File createFile(String project, String fileName, String storePath) throws Exception {
@@ -82,6 +87,7 @@ public class FileServiceImpl implements FileService {
         }
         return file;
     }
+
     @Override
     public boolean showImage(String project, String imgName, HttpServletResponse response) {
         String filePath = getPath(project, imgName);

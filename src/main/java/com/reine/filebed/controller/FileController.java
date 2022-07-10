@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 图片存储控制器
@@ -33,8 +34,8 @@ public class FileController {
     public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) throws Exception {
         File file = transferToFile(imgFile);
         String fileName = imgFile.getOriginalFilename();
-        String s = fileService.storeImageAPI(project, file, fileName);
-        return new Result(2001, "上传成功", s);
+        Map<String, String> resultMap = fileService.storeImageAPI(project, file, fileName);
+        return new Result(2001, "上传成功", resultMap);
     }
 
     /**

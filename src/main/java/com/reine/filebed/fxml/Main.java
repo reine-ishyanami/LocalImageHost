@@ -10,13 +10,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
+import javafx.stage.*;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -61,21 +59,25 @@ public class Main {
         if (dragboard.hasUrl()) {
             String url = dragboard.getUrl();
             file = new File(url);
-            Image image = new Image(url);
-            ivImage.setPreserveRatio(true);
-            // 设置不超过图片展示区域
-            if (image.getWidth() > image.getHeight()) {
-                ivImage.setFitWidth(400);
-            } else {
-                ivImage.setFitHeight(250);
-            }
-            ivImage.setImage(image);
+            setIvImage(url);
         }
     }
 
     @FXML
     void uploadFile() throws Exception {
         String projectText = tfProject.getText();
+        if (emptyAlert(projectText)) return;
+        String path = tfPath.getText();
+        Map<String, String> resultMap = fileService.storeImageGUI(path, projectText, file);
+        if (resultMap != null) {
+            tfInfo.setVisible(true);
+            String project = resultMap.get("project");
+            String fileName = resultMap.get("fileName");
+            tfInfo.setText("http://localhost:8824/view/" + project + "/" + fileName);
+        }
+    }
+
+    private boolean emptyAlert(String projectText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.setStyle("-fx-border-color: #ff9999; -fx-border-width: 3;");
@@ -86,18 +88,13 @@ public class Main {
         if (projectText.trim().equals("")) {
             alert.setContentText("项目名不能为空");
             alert.show();
-            return;
+            return true;
         } else if (file == null) {
             alert.setContentText("图片不能为空");
             alert.show();
-            return;
+            return true;
         }
-        String path = tfPath.getText();
-        String s = fileService.storeImageGUI(path, projectText, file);
-        if (s != null) {
-            tfInfo.setVisible(true);
-            tfInfo.setText("http://localhost:8824/view" + s);
-        }
+        return false;
     }
 
     @FXML
@@ -121,5 +118,31 @@ public class Main {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
         }
+    }
+
+    @FXML
+    void selectImage() {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("选择图片");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("图片", "*.png", "*.jpg"));
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        Optional.ofNullable(selectedFile).ifPresent(file1 -> {
+            file = new File("file:\\" + file1.getPath());
+            String url = file.getPath();
+            setIvImage(url);
+        });
+    }
+
+    private void setIvImage(String url) {
+        Image image = new Image(url);
+        ivImage.setPreserveRatio(true);
+        // 设置不超过图片展示区域
+        if (image.getWidth() > image.getHeight()) {
+            ivImage.setFitWidth(400);
+        } else {
+            ivImage.setFitHeight(250);
+        }
+        ivImage.setImage(image);
     }
 }

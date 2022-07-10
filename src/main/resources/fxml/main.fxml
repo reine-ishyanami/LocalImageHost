@@ -14,7 +14,7 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.filebed.fxml.Main">
     <center>
         <StackPane onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <Label text="拖拽图片到此处" textFill="#0000005c">
+            <Label text="拖拽图片到此处" textFill="#0000005c" onMouseClicked="#selectImage">
                 <font>
                     <Font size="35.0" />
                 </font>

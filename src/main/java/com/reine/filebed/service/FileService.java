@@ -2,6 +2,7 @@ package com.reine.filebed.service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Map;
 
 /**
  * @author reine
@@ -15,7 +16,7 @@ public interface FileService {
      * @param imgFile 文件
      * @return 文件访问地址
      */
-    String storeImageGUI(String path, String project, File imgFile) throws Exception;
+    Map<String, String> storeImageGUI(String path, String project, File imgFile) throws Exception;
 
     /**
      * RestAPI文件上传
@@ -25,7 +26,7 @@ public interface FileService {
      * @param fileName 文件名
      * @return 文件访问地址
      */
-    String storeImageAPI(String project, File imgFile, String fileName) throws Exception;
+    Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception;
 
     /**
      * 读取图片
