@@ -83,7 +83,6 @@ public class FileController {
         if (originalFilename != null) {
             file = new File(originalFilename);
             try {
-
                 String[] filename = originalFilename.split("\\.");
                 file = File.createTempFile(filename[0], filename[1]);
                 multipartFile.transferTo(file);

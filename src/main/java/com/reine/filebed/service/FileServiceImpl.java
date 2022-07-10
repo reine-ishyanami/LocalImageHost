@@ -33,25 +33,28 @@ public class FileServiceImpl implements FileService {
     public String storeImageGUI(String path, String project, File imgFile) throws Exception {
         String fileName = imgFile.getName();
         String storePath = path + "\\" + project;
-        File dir = new File(storePath);
         // 拼接文件路径
-        String filePath = storePath + "\\" + fileName;
-        File file = new File(filePath);
-        if (uploadImage(file, project, fileName)) {
-            throw new Exception("插入数据库失败");
-        }
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        File file = createFile(project, fileName, storePath);
+        int i = imgFile.getPath().indexOf(":");
+        String Realpath = imgFile.getPath().substring(i + 2);
+        return copyFileAndGetUrl(project, fileName, file, Realpath);
+    }
+
+    @Override
+    public String storeImageAPI(String project, File imgFile, String fileName) throws Exception {
+        String storePath = localStore + project;
+        File file = createFile(project, fileName, storePath);
+        String Realpath = imgFile.getAbsolutePath();
+        return copyFileAndGetUrl(project, fileName, file, Realpath);
+    }
+
+    private String copyFileAndGetUrl(String project, String fileName, File file, String Realpath) throws Exception {
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
         int len;
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
-        int i = imgFile.getPath().indexOf(":");
-        String Realpath = imgFile.getPath().substring(i + 2);
-        log.info("Realpath---{}", Realpath);
         try {
             inputStream = Files.newInputStream(Paths.get(Realpath));
             outputStream = new FileOutputStream(file);
@@ -64,15 +67,11 @@ public class FileServiceImpl implements FileService {
         } finally {
             closeStream(inputStream, outputStream);
         }
-        log.info("file.getAbsolutePath()---{}", file.getAbsolutePath());
         return "/" + project + "/" + fileName;
     }
 
-    @Override
-    public String storeImageAPI(String project, File imgFile, String fileName) throws Exception {
-        String storePath = localStore + project;
+    private File createFile(String project, String fileName, String storePath) throws Exception {
         File dir = new File(storePath);
-        // 拼接文件路径
         String filePath = storePath + "\\" + fileName;
         File file = new File(filePath);
         if (uploadImage(file, project, fileName)) {
@@ -81,28 +80,8 @@ public class FileServiceImpl implements FileService {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        // 数据缓冲区
-        byte[] bs = new byte[1024];
-        // 读取到的数据长度
-        int len;
-        InputStream inputStream = null;
-        FileOutputStream outputStream = null;
-        try {
-            inputStream = Files.newInputStream(imgFile.toPath());
-            outputStream = new FileOutputStream(file);
-            while ((len = inputStream.read(bs)) != -1) {
-                outputStream.write(bs, 0, len);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new Exception("写入文件失败");
-        } finally {
-            closeStream(inputStream, outputStream);
-        }
-        log.info("file.getAbsolutePath()---{}", file.getAbsolutePath());
-        return "/" + project + "/" + fileName;
+        return file;
     }
-
     @Override
     public boolean showImage(String project, String imgName, HttpServletResponse response) {
         String filePath = getPath(project, imgName);
