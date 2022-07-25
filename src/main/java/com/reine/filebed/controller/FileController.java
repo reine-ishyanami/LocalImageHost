@@ -2,10 +2,10 @@ package com.reine.filebed.controller;
 
 import com.reine.filebed.entity.Result;
 import com.reine.filebed.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 public class FileController {
 
-    @Autowired
+    @Resource
     private FileService fileService;
 
     /**
@@ -31,11 +31,16 @@ public class FileController {
      * @return 成功或失败信息
      */
     @PostMapping("/upload/{project}")
-    public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) throws Exception {
-        File file = transferToFile(imgFile);
-        String fileName = imgFile.getOriginalFilename();
-        Map<String, String> resultMap = fileService.storeImageAPI(project, file, fileName);
-        return new Result(2001, "上传成功", resultMap);
+    public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) {
+        Map<String, String> resultMap;
+        try {
+            File file = transferToFile(imgFile);
+            String fileName = imgFile.getOriginalFilename();
+            resultMap = fileService.storeImageAPI(project, file, fileName);
+        } catch (Exception e) {
+            return Result.fail("上传失败");
+        }
+        return Result.ok("上传成功", resultMap);
     }
 
     /**
@@ -49,9 +54,9 @@ public class FileController {
     public Result showImage(@PathVariable String project, @PathVariable String imgName, HttpServletResponse response) {
         boolean flag = fileService.showImage(project, imgName, response);
         if (flag) {
-            return new Result(2002, "图片展示成功", null);
+            return Result.ok("图片展示成功");
         } else {
-            return new Result(5001, "图片展示失败", null);
+            return Result.fail("图片展示失败");
         }
     }
 
@@ -66,9 +71,9 @@ public class FileController {
     public Result deleteImage(@PathVariable String project, @PathVariable String imgName) {
         boolean flag = fileService.deleteImage(project, imgName);
         if (flag) {
-            return new Result(2003, "图片删除成功", null);
+            return Result.ok("图片删除成功");
         } else {
-            return new Result(5002, "图片删除失败", null);
+            return Result.fail("图片删除失败");
         }
     }
 
@@ -78,19 +83,14 @@ public class FileController {
      * @param multipartFile 文件
      * @return 文件
      */
-    private File transferToFile(MultipartFile multipartFile) {
+    private File transferToFile(MultipartFile multipartFile) throws IOException {
         String originalFilename = multipartFile.getOriginalFilename();
         File file = null;
         if (originalFilename != null) {
-            file = new File(originalFilename);
-            try {
-                String[] filename = originalFilename.split("\\.");
-                file = File.createTempFile(filename[0], filename[1]);
-                multipartFile.transferTo(file);
-                file.deleteOnExit();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String[] filename = originalFilename.split("\\.");
+            file = File.createTempFile(filename[0], filename[1]);
+            multipartFile.transferTo(file);
+            file.deleteOnExit();
         }
         return file;
     }
