@@ -1,7 +1,7 @@
-package com.reine.filebed.controller;
+package com.reine.imagehost.controller;
 
-import com.reine.filebed.entity.Result;
-import com.reine.filebed.service.FileService;
+import com.reine.imagehost.entity.Result;
+import com.reine.imagehost.service.FileService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
