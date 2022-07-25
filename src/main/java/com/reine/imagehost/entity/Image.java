@@ -1,4 +1,4 @@
-package com.reine.filebed.entity;
+package com.reine.imagehost.entity;
 
 import lombok.Data;
 

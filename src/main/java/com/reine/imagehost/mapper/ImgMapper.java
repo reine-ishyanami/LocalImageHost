@@ -1,6 +1,6 @@
-package com.reine.filebed.mapper;
+package com.reine.imagehost.mapper;
 
-import com.reine.filebed.entity.Image;
+import com.reine.imagehost.entity.Image;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,7 +1,7 @@
-package com.reine.filebed.service;
+package com.reine.imagehost.service;
 
-import com.reine.filebed.entity.Image;
-import com.reine.filebed.mapper.ImgMapper;
+import com.reine.imagehost.entity.Image;
+import com.reine.imagehost.mapper.ImgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

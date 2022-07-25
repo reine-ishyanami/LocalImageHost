@@ -1,4 +1,4 @@
-package com.reine.filebed.service;
+package com.reine.imagehost.service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
