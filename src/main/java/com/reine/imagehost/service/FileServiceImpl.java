@@ -1,7 +1,7 @@
-package com.reine.filebed.service;
+package com.reine.imagehost.service;
 
-import com.reine.filebed.entity.Image;
-import com.reine.filebed.mapper.ImgMapper;
+import com.reine.imagehost.entity.Image;
+import com.reine.imagehost.mapper.ImgMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,19 +38,19 @@ public class FileServiceImpl implements FileService {
         // 拼接文件路径
         File file = createFile(project, fileName, storePath);
         int i = imgFile.getPath().indexOf(":");
-        String Realpath = imgFile.getPath().substring(i + 2);
-        return copyFileAndGetUrl(project, fileName, file, Realpath);
+        String realpath = imgFile.getPath().substring(i + 2);
+        return copyFileAndGetUrl(project, fileName, file, realpath);
     }
 
     @Override
     public Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
         String storePath = localStore + project;
         File file = createFile(project, fileName, storePath);
-        String Realpath = imgFile.getAbsolutePath();
-        return copyFileAndGetUrl(project, fileName, file, Realpath);
+        String realpath = imgFile.getAbsolutePath();
+        return copyFileAndGetUrl(project, fileName, file, realpath);
     }
 
-    private Map<String, String> copyFileAndGetUrl(String project, String fileName, File file, String Realpath) throws Exception {
+    private Map<String, String> copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
-            inputStream = Files.newInputStream(Paths.get(Realpath));
+            inputStream = Files.newInputStream(Paths.get(realpath));
             outputStream = new FileOutputStream(file);
             while ((len = inputStream.read(bs)) != -1) {
                 outputStream.write(bs, 0, len);
@@ -69,9 +69,9 @@ public class FileServiceImpl implements FileService {
         } finally {
             closeStream(inputStream, outputStream);
         }
-        Map<String, String> resultMap = new HashMap<>();
+        Map<String, String> resultMap = new HashMap<>(2);
         resultMap.put("project", project);
-        resultMap.put("fileName", fileName);
+        resultMap.put("filename", fileName);
         return resultMap;
     }
 

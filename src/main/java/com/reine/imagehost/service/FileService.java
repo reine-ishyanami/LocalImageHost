@@ -1,4 +1,4 @@
-package com.reine.filebed.service;
+package com.reine.imagehost.service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -12,9 +12,11 @@ public interface FileService {
     /**
      * GUI文件上传
      *
+     * @param path    保存路径
      * @param project 项目名
      * @param imgFile 文件
      * @return 文件访问地址
+     * @throws Exception 文件不存在
      */
     Map<String, String> storeImageGUI(String path, String project, File imgFile) throws Exception;
 
@@ -25,6 +27,7 @@ public interface FileService {
      * @param imgFile  文件
      * @param fileName 文件名
      * @return 文件访问地址
+     * @throws Exception 文件不存在
      */
     Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception;
 
@@ -51,6 +54,5 @@ public interface FileService {
      * 创建数据库
      */
     void createTable();
-
 
 }
