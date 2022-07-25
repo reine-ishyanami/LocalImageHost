@@ -1,8 +1,9 @@
-package com.reine.filebed.fxml;
+package com.reine.imagehost.fxcontroller;
 
-import com.reine.filebed.LocalFilebedApplication;
-import com.reine.filebed.service.FileService;
+import com.reine.imagehost.service.FileService;
+import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
@@ -11,18 +12,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.stage.*;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.Resource;
 import java.io.File;
+import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * @author reine
  * 2022/6/30 7:51
  */
-@Configuration
-public class Main {
+@FXMLController
+public class Main implements Initializable {
 
     @FXML
     public TextField tfPath;
@@ -46,7 +50,11 @@ public class Main {
     /**
      * 文件及数据库操作服务
      */
+    @Resource
     private FileService fileService;
+
+    @Value("${local.store}")
+    private String originPath;
 
     @FXML
     void boxDragOver(DragEvent event) {
@@ -66,13 +74,15 @@ public class Main {
     @FXML
     void uploadFile() throws Exception {
         String projectText = tfProject.getText();
-        if (emptyAlert(projectText)) return;
+        if (emptyAlert(projectText)) {
+            return;
+        }
         String path = tfPath.getText();
         Map<String, String> resultMap = fileService.storeImageGUI(path, projectText, file);
         if (resultMap != null) {
             tfInfo.setVisible(true);
             String project = resultMap.get("project");
-            String fileName = resultMap.get("fileName");
+            String fileName = resultMap.get("filename");
             tfInfo.setText("http://localhost:8824/view/" + project + "/" + fileName);
         }
     }
@@ -85,7 +95,7 @@ public class Main {
         Window window = tfInfo.getScene().getWindow();
         alert.initOwner(window);
         alert.setHeaderText("错误");
-        if (projectText.trim().equals("")) {
+        if ("".equals(projectText.trim())) {
             alert.setContentText("项目名不能为空");
             alert.show();
             return true;
@@ -105,19 +115,6 @@ public class Main {
         directoryChooser.setInitialDirectory(path);
         File file = directoryChooser.showDialog(stage);
         Optional.ofNullable(file).ifPresent(file1 -> tfPath.setText(file1.getAbsolutePath()));
-    }
-
-    /**
-     * GUI数据初始化
-     */
-    public void initData() {
-        String originPath = LocalFilebedApplication.APPLICATION_CONTEXT.getEnvironment().getProperty("local.store");
-        fileService = (FileService) LocalFilebedApplication.APPLICATION_CONTEXT.getBean("fileServiceImpl");
-        fileService.createTable();
-        if (originPath != null) {
-            path = new File(originPath);
-            tfPath.setText(path.getAbsolutePath());
-        }
     }
 
     @FXML
@@ -144,5 +141,17 @@ public class Main {
             ivImage.setFitHeight(250);
         }
         ivImage.setImage(image);
+    }
+
+    /**
+     * GUI数据初始化
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        fileService.createTable();
+        if (originPath != null) {
+            path = new File(originPath);
+            tfPath.setText(path.getAbsolutePath());
+        }
     }
 }

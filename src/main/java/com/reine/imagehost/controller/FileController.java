@@ -1,7 +1,7 @@
-package com.reine.filebed.controller;
+package com.reine.imagehost.controller;
 
-import com.reine.filebed.entity.Result;
-import com.reine.filebed.service.FileService;
+import com.reine.imagehost.entity.Result;
+import com.reine.imagehost.service.FileService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,16 +27,21 @@ public class FileController {
      * 图片上传
      *
      * @param project 项目名称
-     * @param imgFile 图片
+     * @param imgFile 图片文件
+     * @param filename 文件名
      * @return 成功或失败信息
      */
     @PostMapping("/upload/{project}")
-    public Result storeImage(@PathVariable String project, @RequestParam("imgFile") MultipartFile imgFile) {
+    public Result storeImage(@PathVariable String project,
+                             @RequestParam("imgFile") MultipartFile imgFile,
+                             @RequestParam(value = "filename", required = false) String filename) {
         Map<String, String> resultMap;
         try {
             File file = transferToFile(imgFile);
-            String fileName = imgFile.getOriginalFilename();
-            resultMap = fileService.storeImageAPI(project, file, fileName);
+            if (filename == null) {
+                filename = imgFile.getOriginalFilename();
+            }
+            resultMap = fileService.storeImageAPI(project, file, filename);
         } catch (Exception e) {
             return Result.fail("上传失败");
         }
@@ -88,7 +93,7 @@ public class FileController {
         File file = null;
         if (originalFilename != null) {
             String[] filename = originalFilename.split("\\.");
-            file = File.createTempFile(filename[0], filename[1]);
+            file = File.createTempFile(filename[0], "." + filename[1]);
             multipartFile.transferTo(file);
             file.deleteOnExit();
         }

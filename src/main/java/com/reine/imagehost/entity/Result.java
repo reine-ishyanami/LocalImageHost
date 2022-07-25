@@ -1,4 +1,4 @@
-package com.reine.filebed.entity;
+package com.reine.imagehost.entity;
 
 import lombok.Data;
 
@@ -20,13 +20,13 @@ public class Result {
 
     private String message;
 
-    private Map<String, String> resultMap;
+    private Map<String, String> data;
 
     public static Result ok(String message, Map<String, String> map) {
         Result result = new Result();
         result.setSuccess(true);
         result.setMessage(message);
-        result.setResultMap(map);
+        result.setData(map);
         return result;
     }
 

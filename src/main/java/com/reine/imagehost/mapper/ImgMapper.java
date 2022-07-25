@@ -1,6 +1,6 @@
-package com.reine.filebed.mapper;
+package com.reine.imagehost.mapper;
 
-import com.reine.filebed.entity.Image;
+import com.reine.imagehost.entity.Image;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -32,6 +32,7 @@ public interface ImgMapper {
 
     /**
      * 通过文件name删除文件
+     * @param project 项目名
      * @param name 文件名
      * @return 受影响的行数
      */
