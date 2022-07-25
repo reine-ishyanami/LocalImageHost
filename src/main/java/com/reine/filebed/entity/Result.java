@@ -1,8 +1,6 @@
 package com.reine.filebed.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
@@ -13,14 +11,37 @@ import java.util.Map;
  * @since 2022/4/30 8:44
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Result {
 
-    private Integer code;
+    private Result() {
+    }
+
+    private Boolean success;
 
     private String message;
 
     private Map<String, String> resultMap;
+
+    public static Result ok(String message, Map<String, String> map) {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage(message);
+        result.setResultMap(map);
+        return result;
+    }
+
+    public static Result ok(String message) {
+        Result result = new Result();
+        result.setSuccess(true);
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result fail(String message) {
+        Result result = new Result();
+        result.setSuccess(false);
+        result.setMessage(message);
+        return result;
+    }
 
 }

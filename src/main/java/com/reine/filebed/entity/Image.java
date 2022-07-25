@@ -1,16 +1,12 @@
 package com.reine.filebed.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author reine
  * 2022/7/6 21:40
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Image {
     /**
      * 主键id
