@@ -101,8 +101,8 @@ public class FileServiceImpl implements FileService {
             inputStream.read(buffer);
             outputStream = response.getOutputStream();
             outputStream.write(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | NullPointerException e) {
+            log.error("文件不存在");
             return false;
         } finally {
             closeStream(inputStream, outputStream);
