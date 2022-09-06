@@ -21,7 +21,7 @@
                     <Font size="35.0"/>
                 </font>
             </Label>
-            <ImageView fx:id="ivImage" pickOnBounds="true" preserveRatio="true"/>
+            <ImageView fx:id="ivImage" pickOnBounds="true" preserveRatio="true" onMouseClicked="#selectImage"/>
             <BorderPane.margin>
                 <Insets top="20.0"/>
             </BorderPane.margin>

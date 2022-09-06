@@ -2,6 +2,11 @@
 
 > v2.0.0
 
+## 默认不开启图形上传界面，如需启用请在运行命令后添加 GUI，如
+```shell
+java -jar local-image-host-2.0.0.jar GUI
+```
+
 ## POST 上传图片接口
 
 POST /upload/{project}
