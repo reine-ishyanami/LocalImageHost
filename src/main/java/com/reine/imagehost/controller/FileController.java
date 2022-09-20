@@ -31,14 +31,14 @@ public class FileController {
      * @param filename 文件名
      * @return 成功或失败信息
      */
-    @PostMapping("/upload/{project}")
+    @PostMapping("/{project}")
     public Result storeImage(@PathVariable String project,
                              @RequestParam("imgFile") MultipartFile imgFile,
                              @RequestParam(value = "filename", required = false) String filename) {
         Map<String, String> resultMap;
         try {
             File file = transferToFile(imgFile);
-            if (filename == null) {
+            if (filename == null || "".equals(filename)) {
                 filename = imgFile.getOriginalFilename();
             }
             resultMap = fileService.storeImageAPI(project, file, filename);
@@ -55,7 +55,7 @@ public class FileController {
      * @param imgName 图片名称
      * @return 成功或失败信息
      */
-    @GetMapping("/view/{project}/{imgName}")
+    @GetMapping("/{project}/{imgName}")
     public Result showImage(@PathVariable String project, @PathVariable String imgName, HttpServletResponse response) {
         boolean flag = fileService.showImage(project, imgName, response);
         if (flag) {
@@ -72,7 +72,7 @@ public class FileController {
      * @param imgName 图片名称
      * @return 成功或失败信息
      */
-    @DeleteMapping("/delete/{project}/{imgName}")
+    @DeleteMapping("/{project}/{imgName}")
     public Result deleteImage(@PathVariable String project, @PathVariable String imgName) {
         boolean flag = fileService.deleteImage(project, imgName);
         if (flag) {
