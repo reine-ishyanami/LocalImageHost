@@ -9,7 +9,7 @@ java -jar local-image-host-2.0.0.jar GUI
 
 ## POST 上传图片接口
 
-POST /upload/{project}
+POST /{project}
 
 > Body 请求参数
 
@@ -58,7 +58,7 @@ filename: string
 
 ## GET 获取图片
 
-GET /view/{project}/{imgName}
+GET /{project}/{imgName}
 
 ### 请求参数
 
@@ -103,7 +103,7 @@ GET /view/{project}/{imgName}
 
 ## DELETE 删除图片
 
-DELETE /delete/{project}/{imgName}
+DELETE /{project}/{imgName}
 
 ### 请求参数
 

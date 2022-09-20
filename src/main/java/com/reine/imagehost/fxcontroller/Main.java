@@ -83,7 +83,7 @@ public class Main implements Initializable {
             tfInfo.setVisible(true);
             String project = resultMap.get("project");
             String fileName = resultMap.get("filename");
-            tfInfo.setText("http://localhost:8824/view/" + project + "/" + fileName);
+            tfInfo.setText("http://localhost:8824/" + project + "/" + fileName);
         }
     }
 
