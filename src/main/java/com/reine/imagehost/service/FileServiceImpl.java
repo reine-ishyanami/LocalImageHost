@@ -1,8 +1,10 @@
 package com.reine.imagehost.service;
 
 import com.reine.imagehost.entity.Image;
+import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.mapper.ImgMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author reine
@@ -28,11 +30,14 @@ public class FileServiceImpl implements FileService {
     @Value("${local.store}")
     private String localStore;
 
+    @Value("${server.port}")
+    private String port;
+
     @Resource
     private ImgMapper imgMapper;
 
     @Override
-    public Map<String, String> storeImageGUI(String path, String project, File imgFile) throws Exception {
+    public Map<String, Object> storeImageGUI(String path, String project, File imgFile) throws Exception {
         String fileName = imgFile.getName();
         String storePath = path + "\\" + project;
         // 拼接文件路径
@@ -43,14 +48,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
+    public Map<String, Object> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
         String storePath = localStore + project;
         File file = createFile(project, fileName, storePath);
         String realpath = imgFile.getAbsolutePath();
         return copyFileAndGetUrl(project, fileName, file, realpath);
     }
 
-    private Map<String, String> copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
+    private Map<String, Object> copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
@@ -69,7 +74,7 @@ public class FileServiceImpl implements FileService {
         } finally {
             closeStream(inputStream, outputStream);
         }
-        Map<String, String> resultMap = new HashMap<>(2);
+        Map<String, Object> resultMap = new HashMap<>(2);
         resultMap.put("project", project);
         resultMap.put("filename", fileName);
         return resultMap;
@@ -125,6 +130,24 @@ public class FileServiceImpl implements FileService {
     @Override
     public void createTable() {
         imgMapper.createTable();
+    }
+
+    @Override
+    public Map<String, Object> listImage(String project) {
+        List<ImageWithUrl> imageWithUrls = new ArrayList<>();
+        List<Image> images = imgMapper.listImg(project);
+        images.forEach(image -> {
+            ImageWithUrl imageWithUrl = new ImageWithUrl();
+            imageWithUrl.setId(image.getId());
+            imageWithUrl.setName(image.getName());
+            imageWithUrl.setProject(image.getProject());
+            imageWithUrl.setPath(image.getPath());
+            imageWithUrl.setUrl("http://localhost:" + port + "/" + image.getProject() + "/" + image.getName());
+            imageWithUrls.add(imageWithUrl);
+        });
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", imageWithUrls);
+        return map;
     }
 
     /**

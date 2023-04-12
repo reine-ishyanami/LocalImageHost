@@ -3,6 +3,8 @@ package com.reine.imagehost.mapper;
 import com.reine.imagehost.entity.Image;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author reine
  * 2022/7/6 21:34
@@ -37,4 +39,11 @@ public interface ImgMapper {
      * @return 受影响的行数
      */
     Integer deleteImg(String project,String name);
+
+    /**
+     * 查询项目下所有图片
+     * @param project 项目名
+     * @return 图片列表
+     */
+    List<Image> listImg(String project);
 }

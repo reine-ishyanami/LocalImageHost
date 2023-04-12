@@ -1,6 +1,10 @@
 # LocalImageHost
 
-> v2.0.2
+> v2.2.0
+
+Base URLs:
+
+# Default
 
 ## POST 上传图片接口
 
@@ -36,7 +40,6 @@ filename: string
   }
 }
 ```
-> 失败
 
 ```json
 {
@@ -68,16 +71,15 @@ GET /{project}/{imgName}
 
 ```json
 {
-  "success": true,
-  "message": "图片展示成功"
+  "success": false,
+  "message": "图片展示失败"
 }
 ```
-> 失败
 
 ```json
 {
-  "success": false,
-  "message": "图片展示失败"
+  "success": true,
+  "message": "图片展示成功"
 }
 ```
 
@@ -117,7 +119,6 @@ DELETE /{project}/{imgName}
   "message": "图片删除成功"
 }
 ```
-> 失败
 
 ```json
 {
@@ -141,7 +142,77 @@ DELETE /{project}/{imgName}
 |» success|boolean|true|none|成功|none|
 |» message|string|true|none|信息|none|
 
+## GET 查询图片列表
+
+GET /list
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|project|query|string| 否 |none|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "project": "string",
+    "filename": "string",
+    "list": [
+      {
+        "url": "string",
+        "id": 0,
+        "path": "string",
+        "project": "string",
+        "name": "string"
+      }
+    ]
+  }
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|[Result](#schemaresult)|
+
 # 数据模型
+
+<h2 id="tocS_ImageWithUrl">ImageWithUrl</h2>
+
+<a id="schemaimagewithurl"></a>
+<a id="schema_ImageWithUrl"></a>
+<a id="tocSimagewithurl"></a>
+<a id="tocsimagewithurl"></a>
+
+```json
+{
+  "url": "string",
+  "id": 0,
+  "path": "string",
+  "project": "string",
+  "name": "string"
+}
+
+```
+
+图片信息
+
+### 属性
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|url|string|true|none||none|
+|id|integer|true|none||none|
+|path|string|true|none||none|
+|project|string|true|none||none|
+|name|string|true|none||none|
 
 <h2 id="tocS_Result">Result</h2>
 
@@ -156,11 +227,22 @@ DELETE /{project}/{imgName}
   "message": "string",
   "data": {
     "project": "string",
-    "filename": "string"
+    "filename": "string",
+    "list": [
+      {
+        "url": "string",
+        "id": 0,
+        "path": "string",
+        "project": "string",
+        "name": "string"
+      }
+    ]
   }
 }
 
 ```
+
+返回结果
 
 ### 属性
 
@@ -169,6 +251,7 @@ DELETE /{project}/{imgName}
 |success|boolean|true|none|成功|none|
 |message|string|true|none|信息|none|
 |data|object|false|none|数据|none|
-|» project|string|true|none|项目名|none|
-|» filename|string|true|none|文件名|none|
+|» project|string|false|none|项目名|none|
+|» filename|string|false|none|文件名|none|
+|» list|[[ImageWithUrl](#schemaimagewithurl)]|false|none||none|
 

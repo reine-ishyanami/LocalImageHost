@@ -18,7 +18,7 @@ public interface FileService {
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Map<String, String> storeImageGUI(String path, String project, File imgFile) throws Exception;
+    Map<String, Object> storeImageGUI(String path, String project, File imgFile) throws Exception;
 
     /**
      * RestAPI文件上传
@@ -29,7 +29,7 @@ public interface FileService {
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Map<String, String> storeImageAPI(String project, File imgFile, String fileName) throws Exception;
+    Map<String, Object> storeImageAPI(String project, File imgFile, String fileName) throws Exception;
 
     /**
      * 读取图片
@@ -55,4 +55,11 @@ public interface FileService {
      */
     void createTable();
 
+    /**
+     * 获取项目下所有图片，以及其访问路径
+     *
+     * @param project 项目名称，为null则查询全部
+     * @return 图片列表
+     */
+    Map<String, Object> listImage(String project);
 }

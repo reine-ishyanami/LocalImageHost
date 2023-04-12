@@ -20,9 +20,9 @@ public class Result {
 
     private String message;
 
-    private Map<String, String> data;
+    private Map<String, Object> data;
 
-    public static Result ok(String message, Map<String, String> map) {
+    public static Result ok(String message, Map<String, Object> map) {
         Result result = new Result();
         result.setSuccess(true);
         result.setMessage(message);
