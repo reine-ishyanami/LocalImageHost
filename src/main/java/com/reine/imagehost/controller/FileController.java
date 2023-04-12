@@ -23,11 +23,17 @@ public class FileController {
     @Resource
     private FileService fileService;
 
+    @GetMapping("/list")
+    public Result listImage(@RequestParam(value = "project", required = false) String project) {
+        Map<String, Object> imgList = fileService.listImage(project);
+        return Result.ok("查询成功", imgList);
+    }
+
     /**
      * 图片上传
      *
-     * @param project 项目名称
-     * @param imgFile 图片文件
+     * @param project  项目名称
+     * @param imgFile  图片文件
      * @param filename 文件名
      * @return 成功或失败信息
      */
@@ -35,7 +41,7 @@ public class FileController {
     public Result storeImage(@PathVariable String project,
                              @RequestParam("imgFile") MultipartFile imgFile,
                              @RequestParam(value = "filename", required = false) String filename) {
-        Map<String, String> resultMap;
+        Map<String, Object> resultMap;
         try {
             File file = transferToFile(imgFile);
             if (filename == null || "".equals(filename)) {

@@ -22,17 +22,26 @@
     <delete id="deleteImg">
         DELETE
         FROM "imgUrl"
-        WHERE project = "${project}"
-          and name = "${name}"
+        WHERE project = #{project}
+          and name = #{name}
     </delete>
     <select id="getPath" resultType="java.lang.String">
         SELECT path
         FROM "imgUrl"
-        WHERE project = "${project}"
-          and name = "${name}"
+        WHERE project = #{project}
+          and name = #{name}
+    </select>
+    <select id="listImg" resultType="com.reine.imagehost.entity.Image">
+        SELECT *
+        FROM "imgUrl"
+        <where>
+            <if test="project != null and project != ''">
+                and project = #{project}
+            </if>
+        </where>
     </select>
     <insert id="storeImg" parameterType="com.reine.imagehost.entity.Image">
         INSERT INTO "imgUrl"(path, project, name)
-        VALUES ("${path}", "${project}", "${name}")
+        VALUES (#{path}, #{project}, #{name})
     </insert>
 </mapper>

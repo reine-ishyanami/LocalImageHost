@@ -30,6 +30,7 @@ public class Main implements Initializable {
 
     @FXML
     public TextField tfPath;
+
     @FXML
     private TextField tfProject;
 
@@ -43,10 +44,12 @@ public class Main implements Initializable {
      * 图片文件
      */
     private File file;
+
     /**
      * 文件存储路径
      */
     private File path;
+
     /**
      * 文件及数据库操作服务
      */
@@ -55,6 +58,9 @@ public class Main implements Initializable {
 
     @Value("${local.store}")
     private String originPath;
+
+    @Value("${server.port}")
+    private String port;
 
     @FXML
     void boxDragOver(DragEvent event) {
@@ -78,12 +84,12 @@ public class Main implements Initializable {
             return;
         }
         String path = tfPath.getText();
-        Map<String, String> resultMap = fileService.storeImageGUI(path, projectText, file);
+        Map<String, Object> resultMap = fileService.storeImageGUI(path, projectText, file);
         if (resultMap != null) {
             tfInfo.setVisible(true);
-            String project = resultMap.get("project");
-            String fileName = resultMap.get("filename");
-            tfInfo.setText("http://localhost:8824/" + project + "/" + fileName);
+            String project = (String) resultMap.get("project");
+            String fileName = (String) resultMap.get("filename");
+            tfInfo.setText("http://localhost:" + port + "/" + project + "/" + fileName);
         }
     }
 
