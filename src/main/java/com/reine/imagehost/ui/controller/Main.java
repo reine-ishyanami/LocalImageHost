@@ -118,7 +118,7 @@ public class Main implements Initializable {
     private boolean emptyAlert(String projectText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-border-color: #ff9999; -fx-border-width: 3;");
+        dialogPane.setStyle("-fx-border-color: linear-gradient(from 0.0% 0.0% to 100.0% 0.0%, #71defaff 0.0%, #fcd296ff 100.0%); -fx-border-width: 3;");
         alert.initStyle(StageStyle.UNDECORATED);
         Window window = tfInfo.getScene().getWindow();
         alert.initOwner(window);
@@ -127,7 +127,8 @@ public class Main implements Initializable {
             alert.setContentText("项目名不能为空");
             alert.show();
             return true;
-        } else if (file == null) {
+        }
+        if (file == null) {
             alert.setContentText("图片不能为空");
             alert.show();
             return true;
