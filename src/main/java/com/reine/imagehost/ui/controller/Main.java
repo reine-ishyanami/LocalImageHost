@@ -1,7 +1,6 @@
-package com.reine.imagehost.fxcontroller;
+package com.reine.imagehost.ui.controller;
 
 import com.reine.imagehost.service.FileService;
-import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -12,9 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.stage.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.net.URL;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
  * @author reine
  * 2022/6/30 7:51
  */
-@FXMLController
+@Component
 public class Main implements Initializable {
 
     @FXML
@@ -53,20 +53,33 @@ public class Main implements Initializable {
     /**
      * 文件及数据库操作服务
      */
-    @Resource
     private FileService fileService;
 
+    /**
+     * 上传后文件的本地存储位置
+     */
     @Value("${local.store}")
     private String originPath;
 
+    /**
+     * 应用启动端口
+     */
     @Value("${server.port}")
     private String port;
 
+    /**
+     * 拖拽经过事件
+     * @param event
+     */
     @FXML
     void boxDragOver(DragEvent event) {
         event.acceptTransferModes(event.getTransferMode());
     }
 
+    /**
+     * 拖拽释放事件
+     * @param event
+     */
     @FXML
     void boxDragDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
@@ -77,6 +90,10 @@ public class Main implements Initializable {
         }
     }
 
+    /**
+     * 上传文件按钮点击事件
+     * @throws Exception
+     */
     @FXML
     void uploadFile() throws Exception {
         String projectText = tfProject.getText();
@@ -93,6 +110,11 @@ public class Main implements Initializable {
         }
     }
 
+    /**
+     * 未选择文件就点击上传的错误弹窗
+     * @param projectText 项目名称
+     * @return 是否显示弹窗
+     */
     private boolean emptyAlert(String projectText) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         DialogPane dialogPane = alert.getDialogPane();
@@ -113,6 +135,9 @@ public class Main implements Initializable {
         return false;
     }
 
+    /**
+     * 上传路径选择
+     */
     @FXML
     void updatePath() {
         Stage stage = new Stage();
@@ -123,6 +148,9 @@ public class Main implements Initializable {
         Optional.ofNullable(file).ifPresent(file1 -> tfPath.setText(file1.getAbsolutePath()));
     }
 
+    /**
+     * 点击选择图片
+     */
     @FXML
     void selectImage() {
         Stage stage = new Stage();
@@ -137,6 +165,10 @@ public class Main implements Initializable {
         });
     }
 
+    /**
+     * 控制图片的显示区域
+     * @param url 图片路径
+     */
     private void setIvImage(String url) {
         Image image = new Image(url);
         ivImage.setPreserveRatio(true);
@@ -159,5 +191,10 @@ public class Main implements Initializable {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
         }
+    }
+
+    @Autowired
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
     }
 }

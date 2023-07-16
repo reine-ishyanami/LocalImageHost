@@ -5,16 +5,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.7</version>
+        <version>3.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.reine</groupId>
     <artifactId>local-image-host</artifactId>
-    <version>2.2.0</version>
+    <version>3.0.0</version>
     <name>LocalImageHost</name>
     <description>LocalImageHost</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
@@ -34,6 +34,17 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <!--javafx-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>17.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>17.0.6</version>
+        </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -41,23 +52,23 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <!--servlet-api-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.2.2</version>
+            <version>3.0.1</version>
         </dependency>
         <!--sqlite-->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.36.0.3</version>
-        </dependency>
-        <!--javafx-support-->
-        <dependency>
-            <groupId>de.roskenet</groupId>
-            <artifactId>springboot-javafx-support</artifactId>
-            <version>2.1.6</version>
         </dependency>
     </dependencies>
 
@@ -67,9 +78,6 @@
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
         <profile>
             <id>prod</id>
