@@ -1,14 +1,15 @@
 # LocalImageHost
 
-> v3.0.0
+> v3.1.0
 
 Base URLs:
 
 # Default
+**[swagger-ui](http://127.0.0.1:8824/swagger-ui.html)**
 
 ## POST 上传图片接口
 
-POST /{project}
+POST /image/{project}
 
 > Body 请求参数
 
@@ -56,7 +57,7 @@ filename: string
 
 ## GET 获取图片
 
-GET /{project}/{imgName}
+GET /image/{project}/{imgName}
 
 ### 请求参数
 
@@ -100,7 +101,7 @@ GET /{project}/{imgName}
 
 ## DELETE 删除图片
 
-DELETE /{project}/{imgName}
+DELETE /image/{project}/{imgName}
 
 ### 请求参数
 
@@ -144,7 +145,7 @@ DELETE /{project}/{imgName}
 
 ## GET 查询图片列表
 
-GET /list
+GET /image/list
 
 ### 请求参数
 
