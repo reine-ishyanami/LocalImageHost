@@ -1,5 +1,6 @@
 package com.reine.imagehost.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Map;
@@ -16,10 +17,13 @@ public class Result {
     private Result() {
     }
 
+    @Schema(description = "是否成功")
     private Boolean success;
 
+    @Schema(description = "错误提示信息")
     private String message;
 
+    @Schema(description = "响应数据内容")
     private Map<String, Object> data;
 
     public static Result ok(String message, Map<String, Object> map) {
