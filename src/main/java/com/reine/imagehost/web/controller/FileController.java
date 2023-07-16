@@ -2,6 +2,9 @@ package com.reine.imagehost.web.controller;
 
 import com.reine.imagehost.entity.Result;
 import com.reine.imagehost.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +21,22 @@ import java.util.Map;
  * @since 2022/4/30 8:41
  */
 @RestController
+@RequestMapping("${web.base.path.image}")
+@Tag(name = "FileController", description = "图片操作")
 public class FileController {
 
     private FileService fileService;
 
+    /**
+     * 查询已上传的所有图片
+     * @param project 项目名称
+     * @return
+     */
     @GetMapping("/list")
-    public Result listImage(@RequestParam(value = "project", required = false) String project) {
+    @Operation(description = "查询已上传的所有图片")
+    public Result listImage(
+            @RequestParam(value = "project", required = false) @Schema(description = "项目名称") String project
+    ) {
         Map<String, Object> imgList = fileService.listImage(project);
         return Result.ok("查询成功", imgList);
     }
@@ -37,9 +50,12 @@ public class FileController {
      * @return 成功或失败信息
      */
     @PostMapping("/{project}")
-    public Result storeImage(@PathVariable String project,
-                             @RequestParam("imgFile") MultipartFile imgFile,
-                             @RequestParam(value = "filename", required = false) String filename) {
+    @Operation(description = "图片上传")
+    public Result storeImage(
+            @PathVariable @Schema(description = "项目名称") String project,
+            @RequestParam("imgFile") @Schema(description = "图片文件") MultipartFile imgFile,
+            @RequestParam(value = "filename", required = false) @Schema(description = "文件名") String filename
+    ) {
         Map<String, Object> resultMap;
         try {
             File file = transferToFile(imgFile);
@@ -61,7 +77,12 @@ public class FileController {
      * @return 成功或失败信息
      */
     @GetMapping("/{project}/{imgName}")
-    public Result showImage(@PathVariable String project, @PathVariable String imgName, HttpServletResponse response) {
+    @Operation(description = "图片读取")
+    public Result showImage(
+            @PathVariable @Schema(description = "项目名称") String project,
+            @PathVariable @Schema(description = "图片名称") String imgName,
+            HttpServletResponse response
+    ) {
         boolean flag = fileService.showImage(project, imgName, response);
         if (flag) {
             return Result.ok("图片展示成功");
@@ -78,7 +99,11 @@ public class FileController {
      * @return 成功或失败信息
      */
     @DeleteMapping("/{project}/{imgName}")
-    public Result deleteImage(@PathVariable String project, @PathVariable String imgName) {
+    @Operation(description = "删除图片")
+    public Result deleteImage(
+            @PathVariable @Schema(description = "项目名称") String project,
+            @PathVariable @Schema(description = "图片名称") String imgName
+    ) {
         boolean flag = fileService.deleteImage(project, imgName);
         if (flag) {
             return Result.ok("图片删除成功");

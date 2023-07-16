@@ -67,8 +67,12 @@ public class Main implements Initializable {
     @Value("${server.port}")
     private String port;
 
+    @Value("${web.base.path.image}")
+    private String webBasePath;
+
     /**
      * 拖拽经过事件
+     *
      * @param event
      */
     @FXML
@@ -78,6 +82,7 @@ public class Main implements Initializable {
 
     /**
      * 拖拽释放事件
+     *
      * @param event
      */
     @FXML
@@ -92,6 +97,7 @@ public class Main implements Initializable {
 
     /**
      * 上传文件按钮点击事件
+     *
      * @throws Exception
      */
     @FXML
@@ -106,12 +112,13 @@ public class Main implements Initializable {
             tfInfo.setVisible(true);
             String project = (String) resultMap.get("project");
             String fileName = (String) resultMap.get("filename");
-            tfInfo.setText("http://localhost:" + port + "/" + project + "/" + fileName);
+            tfInfo.setText("http://localhost:" + port + webBasePath + "/" + project + "/" + fileName);
         }
     }
 
     /**
      * 未选择文件就点击上传的错误弹窗
+     *
      * @param projectText 项目名称
      * @return 是否显示弹窗
      */
@@ -168,6 +175,7 @@ public class Main implements Initializable {
 
     /**
      * 控制图片的显示区域
+     *
      * @param url 图片路径
      */
     private void setIvImage(String url) {
