@@ -3,20 +3,18 @@ package com.reine.imagehost.service;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.mapper.ImgMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
 
 /**
  * @author reine
@@ -33,7 +31,6 @@ public class FileServiceImpl implements FileService {
     @Value("${server.port}")
     private String port;
 
-    @Resource
     private ImgMapper imgMapper;
 
     @Override
@@ -101,7 +98,7 @@ public class FileServiceImpl implements FileService {
         try {
             inputStream = new FileInputStream(filePath);
             int i = inputStream.available();
-            //byte数组用于存放图片字节数据
+            // byte数组用于存放图片字节数据
             byte[] buffer = new byte[i];
             inputStream.read(buffer);
             outputStream = response.getOutputStream();
@@ -222,4 +219,10 @@ public class FileServiceImpl implements FileService {
         Integer integer = imgMapper.deleteImg(project, fileName);
         return integer != null;
     }
+
+    @Autowired
+    public void setImgMapper(ImgMapper imgMapper) {
+        this.imgMapper = imgMapper;
+    }
+
 }

@@ -1,12 +1,12 @@
-package com.reine.imagehost.controller;
+package com.reine.imagehost.web.controller;
 
 import com.reine.imagehost.entity.Result;
 import com.reine.imagehost.service.FileService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 public class FileController {
 
-    @Resource
     private FileService fileService;
 
     @GetMapping("/list")
@@ -106,4 +105,8 @@ public class FileController {
         return file;
     }
 
+    @Autowired
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
 }
