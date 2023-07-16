@@ -53,7 +53,7 @@ public class FileController {
     @Operation(description = "图片上传")
     public Result storeImage(
             @PathVariable @Schema(description = "项目名称") String project,
-            @RequestParam("imgFile") @Schema(description = "图片文件") MultipartFile imgFile,
+            @RequestPart("imgFile") MultipartFile imgFile,
             @RequestParam(value = "filename", required = false) @Schema(description = "文件名") String filename
     ) {
         Map<String, Object> resultMap;
