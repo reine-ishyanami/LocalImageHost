@@ -3,6 +3,9 @@ package com.reine.imagehost.web.controller;
 import com.reine.imagehost.entity.Result;
 import com.reine.imagehost.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,13 +32,17 @@ public class FileController {
 
     /**
      * 查询已上传的所有图片
+     *
      * @param project 项目名称
      * @return
      */
     @GetMapping("/list")
     @Operation(description = "查询已上传的所有图片")
+    @Parameters({
+            @Parameter(name = "project", description = "项目名称", required = false, in = ParameterIn.QUERY)
+    })
     public Result listImage(
-            @RequestParam(value = "project", required = false) @Schema(description = "项目名称") String project
+            @RequestParam(value = "project", required = false) String project
     ) {
         Map<String, Object> imgList = fileService.listImage(project);
         return Result.ok("查询成功", imgList);
@@ -51,10 +58,15 @@ public class FileController {
      */
     @PostMapping("/{project}")
     @Operation(description = "图片上传")
+    @Parameters({
+            @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
+            @Parameter(name = "imgFile", description = "图片文件", required = true, in = ParameterIn.DEFAULT, ref = "imgFile"),
+            @Parameter(name = "filename", description = "文件名", required = false, in = ParameterIn.QUERY)
+    })
     public Result storeImage(
-            @PathVariable @Schema(description = "项目名称") String project,
+            @PathVariable String project,
             @RequestPart("imgFile") MultipartFile imgFile,
-            @RequestParam(value = "filename", required = false) @Schema(description = "文件名") String filename
+            @RequestParam(value = "filename", required = false) String filename
     ) {
         Map<String, Object> resultMap;
         try {
@@ -78,9 +90,13 @@ public class FileController {
      */
     @GetMapping("/{project}/{imgName}")
     @Operation(description = "图片读取")
+    @Parameters({
+            @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
+            @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
+    })
     public Result showImage(
-            @PathVariable @Schema(description = "项目名称") String project,
-            @PathVariable @Schema(description = "图片名称") String imgName,
+            @PathVariable String project,
+            @PathVariable String imgName,
             HttpServletResponse response
     ) {
         boolean flag = fileService.showImage(project, imgName, response);
@@ -100,6 +116,10 @@ public class FileController {
      */
     @DeleteMapping("/{project}/{imgName}")
     @Operation(description = "删除图片")
+    @Parameters({
+            @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
+            @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
+    })
     public Result deleteImage(
             @PathVariable @Schema(description = "项目名称") String project,
             @PathVariable @Schema(description = "图片名称") String imgName

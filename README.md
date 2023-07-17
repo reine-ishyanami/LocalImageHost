@@ -1,11 +1,11 @@
 # LocalImageHost
 
-> v3.1.0
+> v3.2.0
 
 Base URLs:
 
 # Default
-**[swagger-ui](http://127.0.0.1:8824/swagger-ui.html)**
+**[knife4j](http://127.0.0.1:8824/doc.html)**
 
 ## POST 上传图片接口
 

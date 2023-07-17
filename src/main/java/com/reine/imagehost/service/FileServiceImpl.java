@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public Map<String, Object> storeImageGUI(String path, String project, File imgFile) throws Exception {
         String fileName = imgFile.getName();
-        String storePath = path + "\\" + project;
+        String storePath = path + File.separator + project;
         // 拼接文件路径
         File file = createFile(project, fileName, storePath);
         int i = imgFile.getPath().indexOf(":");
@@ -46,7 +47,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Map<String, Object> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
-        String storePath = localStore + project;
+        String storePath = localStore + File.separator + project;
         File file = createFile(project, fileName, storePath);
         String realpath = imgFile.getAbsolutePath();
         return copyFileAndGetUrl(project, fileName, file, realpath);
@@ -79,8 +80,7 @@ public class FileServiceImpl implements FileService {
 
     private File createFile(String project, String fileName, String storePath) throws Exception {
         File dir = new File(storePath);
-        String filePath = storePath + "\\" + fileName;
-        File file = new File(filePath);
+        File file = Path.of(storePath, fileName).toFile();
         if (uploadImage(file, project, fileName)) {
             throw new Exception("插入数据库失败");
         }
