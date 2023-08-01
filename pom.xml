@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.reine</groupId>
-    <artifactId>local-image-host</artifactId>
-    <version>3.2.0</version>
+    <artifactId>LocalImageHost</artifactId>
+    <version>3.2.1</version>
     <name>LocalImageHost</name>
     <description>LocalImageHost</description>
     <properties>
