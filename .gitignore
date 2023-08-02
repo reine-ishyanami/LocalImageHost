@@ -33,3 +33,4 @@ out
 gen
 target
 package-prod.bat
+!/imgUrl.db
