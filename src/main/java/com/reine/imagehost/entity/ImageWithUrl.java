@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ImageWithUrl extends Image {
 
+    /**
+     * 访问url
+     */
     private String url;
-
 }

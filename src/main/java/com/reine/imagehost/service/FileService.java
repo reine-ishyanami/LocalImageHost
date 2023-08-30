@@ -1,9 +1,11 @@
 package com.reine.imagehost.service;
 
+import com.reine.imagehost.entity.ImageWithUrl;
+import com.reine.imagehost.entity.Img;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.File;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author reine
@@ -19,7 +21,7 @@ public interface FileService {
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Map<String, Object> storeImageGUI(String path, String project, File imgFile) throws Exception;
+    Img storeImageGUI(String path, String project, File imgFile) throws Exception;
 
     /**
      * RestAPI文件上传
@@ -30,7 +32,7 @@ public interface FileService {
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Map<String, Object> storeImageAPI(String project, File imgFile, String fileName) throws Exception;
+    Img storeImageAPI(String project, File imgFile, String fileName) throws Exception;
 
     /**
      * 读取图片
@@ -47,9 +49,9 @@ public interface FileService {
      *
      * @param project 项目名
      * @param imgName 图片名
-     * @return 是否成功
+     * @return 返回信息
      */
-    boolean deleteImage(String project, String imgName);
+    String deleteImage(String project, String imgName);
 
     /**
      * 创建数据库
@@ -62,5 +64,5 @@ public interface FileService {
      * @param project 项目名称，为null则查询全部
      * @return 图片列表
      */
-    Map<String, Object> listImage(String project);
+    List<ImageWithUrl> listImage(String project);
 }

@@ -1,5 +1,7 @@
 package com.reine.imagehost.web.controller;
 
+import com.reine.imagehost.entity.ImageWithUrl;
+import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.entity.Result;
 import com.reine.imagehost.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 图片存储控制器
@@ -24,7 +26,7 @@ import java.util.Map;
  * @since 2022/4/30 8:41
  */
 @RestController
-@RequestMapping("${web.base.path.image}")
+@RequestMapping("/${web.base.path.image}")
 @Tag(name = "FileController", description = "图片操作")
 public class FileController {
 
@@ -41,10 +43,10 @@ public class FileController {
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = false, in = ParameterIn.QUERY)
     })
-    public Result listImage(
+    public Result<List<ImageWithUrl>> listImage(
             @RequestParam(value = "project", required = false) String project
     ) {
-        Map<String, Object> imgList = fileService.listImage(project);
+        List<ImageWithUrl> imgList = fileService.listImage(project);
         return Result.ok("查询成功", imgList);
     }
 
@@ -61,24 +63,24 @@ public class FileController {
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgFile", description = "图片文件", required = true, in = ParameterIn.DEFAULT, ref = "imgFile"),
-            @Parameter(name = "filename", description = "文件名", required = false, in = ParameterIn.QUERY)
+            @Parameter(name = "filename", description = "文件名", in = ParameterIn.QUERY)
     })
-    public Result storeImage(
+    public Result<Img> storeImage(
             @PathVariable String project,
             @RequestPart("imgFile") MultipartFile imgFile,
             @RequestParam(value = "filename", required = false) String filename
     ) {
-        Map<String, Object> resultMap;
+        Img img;
         try {
             File file = transferToFile(imgFile);
-            if (filename == null || "".equals(filename)) {
+            if (filename == null || filename.isEmpty()) {
                 filename = imgFile.getOriginalFilename();
             }
-            resultMap = fileService.storeImageAPI(project, file, filename);
+            img = fileService.storeImageAPI(project, file, filename);
         } catch (Exception e) {
             return Result.fail("上传失败");
         }
-        return Result.ok("上传成功", resultMap);
+        return Result.ok("上传成功", img);
     }
 
     /**
@@ -94,7 +96,7 @@ public class FileController {
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
     })
-    public Result showImage(
+    public Result<Void> showImage(
             @PathVariable String project,
             @PathVariable String imgName,
             HttpServletResponse response
@@ -120,15 +122,15 @@ public class FileController {
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
     })
-    public Result deleteImage(
+    public Result<Void> deleteImage(
             @PathVariable @Schema(description = "项目名称") String project,
             @PathVariable @Schema(description = "图片名称") String imgName
     ) {
-        boolean flag = fileService.deleteImage(project, imgName);
-        if (flag) {
+        String result = fileService.deleteImage(project, imgName);
+        if (result == null) {
             return Result.ok("图片删除成功");
         } else {
-            return Result.fail("图片删除失败");
+            return Result.fail(result);
         }
     }
 
