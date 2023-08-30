@@ -1,8 +1,8 @@
 package com.reine.imagehost.ui.controller;
 
+import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
@@ -11,22 +11,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.stage.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.net.URL;
-import java.util.Map;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * @author reine
  * 2022/6/30 7:51
  */
 @Component
-public class Main implements Initializable {
+@Slf4j
+public class Main {
 
     @FXML
     public TextField tfPath;
@@ -65,7 +64,7 @@ public class Main implements Initializable {
      * 应用启动端口
      */
     @Value("${server.port}")
-    private String port;
+    private Integer port;
 
     @Value("${web.base.path.image}")
     private String webBasePath;
@@ -107,12 +106,13 @@ public class Main implements Initializable {
             return;
         }
         String path = tfPath.getText();
-        Map<String, Object> resultMap = fileService.storeImageGUI(path, projectText, file);
-        if (resultMap != null) {
+        Img img = fileService.storeImageGUI(path, projectText, file);
+        if (img != null) {
             tfInfo.setVisible(true);
-            String project = (String) resultMap.get("project");
-            String fileName = (String) resultMap.get("filename");
-            tfInfo.setText("http://localhost:" + port + webBasePath + "/" + project + "/" + fileName);
+            String project = img.getProject();
+            String fileName = img.getName();
+            String text = String.format("http://localhost:%d/%s/%s/%s", port, webBasePath, project, fileName);
+            tfInfo.setText(text);
         }
     }
 
@@ -130,7 +130,7 @@ public class Main implements Initializable {
         Window window = tfInfo.getScene().getWindow();
         alert.initOwner(window);
         alert.setHeaderText("错误");
-        if ("".equals(projectText.trim())) {
+        if (projectText.trim().isEmpty()) {
             alert.setContentText("项目名不能为空");
             alert.show();
             return true;
@@ -193,8 +193,8 @@ public class Main implements Initializable {
     /**
      * GUI数据初始化
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    void initialize() {
         fileService.createTable();
         if (originPath != null) {
             path = new File(originPath);

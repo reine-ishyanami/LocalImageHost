@@ -2,9 +2,11 @@ package com.reine.imagehost.service;
 
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
+import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.mapper.ImgMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,15 @@ public class FileServiceImpl implements FileService {
     private String localStore;
 
     @Value("${server.port}")
-    private String port;
+    private Integer port;
+
+    @Value("${web.base.path.image}")
+    private String webBasePath;
 
     private ImgMapper imgMapper;
 
     @Override
-    public Map<String, Object> storeImageGUI(String path, String project, File imgFile) throws Exception {
+    public Img storeImageGUI(String path, String project, File imgFile) throws Exception {
         String fileName = imgFile.getName();
         String storePath = path + File.separator + project;
         // 拼接文件路径
@@ -46,14 +51,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map<String, Object> storeImageAPI(String project, File imgFile, String fileName) throws Exception {
+    public Img storeImageAPI(String project, File imgFile, String fileName) throws Exception {
         String storePath = localStore + File.separator + project;
         File file = createFile(project, fileName, storePath);
         String realpath = imgFile.getAbsolutePath();
         return copyFileAndGetUrl(project, fileName, file, realpath);
     }
 
-    private Map<String, Object> copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
+    private Img copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
         // 数据缓冲区
         byte[] bs = new byte[1024];
         // 读取到的数据长度
@@ -72,10 +77,10 @@ public class FileServiceImpl implements FileService {
         } finally {
             closeStream(inputStream, outputStream);
         }
-        Map<String, Object> resultMap = new HashMap<>(2);
-        resultMap.put("project", project);
-        resultMap.put("filename", fileName);
-        return resultMap;
+        Img img = new Img();
+        img.setProject(project);
+        img.setName(fileName);
+        return img;
     }
 
     private File createFile(String project, String fileName, String storePath) throws Exception {
@@ -113,11 +118,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean deleteImage(String project, String imgName) {
+    public String deleteImage(String project, String imgName) {
         String filePath = getPath(project, imgName);
+        if (filePath == null) {
+            return "图片不存在";
+        }
         File file = new File(filePath);
         if (!file.exists()) {
-            return false;
+            return "图片不存在";
         } else {
             file.delete();
             return deleteImageInfo(project, imgName);
@@ -130,21 +138,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Map<String, Object> listImage(String project) {
+    public List<ImageWithUrl> listImage(String project) {
         List<ImageWithUrl> imageWithUrls = new ArrayList<>();
         List<Image> images = imgMapper.listImg(project);
+
         images.forEach(image -> {
             ImageWithUrl imageWithUrl = new ImageWithUrl();
-            imageWithUrl.setId(image.getId());
-            imageWithUrl.setName(image.getName());
-            imageWithUrl.setProject(image.getProject());
-            imageWithUrl.setPath(image.getPath());
-            imageWithUrl.setUrl("http://localhost:" + port + "/" + image.getProject() + "/" + image.getName());
+            BeanUtils.copyProperties(image, imageWithUrl);
+            String url = String.format("http://localhost:%d/%s/%s/%s", port, webBasePath, image.getProject(), image.getName());
+            imageWithUrl.setUrl(url);
             imageWithUrls.add(imageWithUrl);
         });
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", imageWithUrls);
-        return map;
+        return imageWithUrls;
     }
 
     /**
@@ -215,9 +220,9 @@ public class FileServiceImpl implements FileService {
      * @param fileName 文件名
      * @return 成功标志
      */
-    private boolean deleteImageInfo(String project, String fileName) {
+    private String deleteImageInfo(String project, String fileName) {
         Integer integer = imgMapper.deleteImg(project, fileName);
-        return integer != null;
+        return integer != null ? null : "图片数据不存在";
     }
 
     @Autowired

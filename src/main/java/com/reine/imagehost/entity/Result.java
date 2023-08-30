@@ -1,9 +1,10 @@
 package com.reine.imagehost.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Data;
-
-import java.util.Map;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * 返回结果类
@@ -12,10 +13,9 @@ import java.util.Map;
  * @since 2022/4/30 8:44
  */
 @Data
-public class Result {
-
-    private Result() {
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Accessors(chain = true)
+public class Result<T> {
 
     @Schema(description = "是否成功")
     private Boolean success;
@@ -24,28 +24,25 @@ public class Result {
     private String message;
 
     @Schema(description = "响应数据内容")
-    private Map<String, Object> data;
+    private T data;
 
-    public static Result ok(String message, Map<String, Object> map) {
-        Result result = new Result();
-        result.setSuccess(true);
-        result.setMessage(message);
-        result.setData(map);
-        return result;
+    public static <T> Result<T> ok(String message, T data) {
+        return new Result<T>()
+                .setSuccess(true)
+                .setMessage(message)
+                .setData(data);
     }
 
-    public static Result ok(String message) {
-        Result result = new Result();
-        result.setSuccess(true);
-        result.setMessage(message);
-        return result;
+    public static <T> Result<T> ok(String message) {
+        return new Result<T>()
+                .setSuccess(true)
+                .setMessage(message);
     }
 
-    public static Result fail(String message) {
-        Result result = new Result();
-        result.setSuccess(false);
-        result.setMessage(message);
-        return result;
+    public static <T> Result<T> fail(String message) {
+        return new Result<T>()
+                .setSuccess(true)
+                .setMessage(message);
     }
 
 }

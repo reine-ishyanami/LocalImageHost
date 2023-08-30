@@ -1,13 +1,15 @@
 package com.reine.imagehost.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author reine
  * 2022/7/6 21:40
  */
 @Data
-public class Image {
+@EqualsAndHashCode(callSuper = true)
+public class Image extends Img {
     /**
      * 主键id
      */
@@ -16,12 +18,4 @@ public class Image {
      * 文件路径
      */
     private String path;
-    /**
-     * 项目名
-     */
-    private String project;
-    /**
-     * 文件名
-     */
-    private String name;
 }
