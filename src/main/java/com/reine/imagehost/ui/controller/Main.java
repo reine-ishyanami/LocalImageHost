@@ -5,6 +5,7 @@ import com.reine.imagehost.service.FileService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +40,9 @@ public class Main {
 
     @FXML
     private ImageView ivImage;
+
+    @FXML
+    private Label label;
 
     /**
      * 图片文件
@@ -203,6 +207,7 @@ public class Main {
             ivImage.setFitHeight(0);
         }
         ivImage.setImage(image);
+        label.setText("");
     }
 
     /**

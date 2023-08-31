@@ -16,7 +16,7 @@
     <center>
         <StackPane onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" prefHeight="150.0" prefWidth="200.0"
                    BorderPane.alignment="CENTER">
-            <Label text="拖拽图片到此处" textFill="#0000005c" onMouseClicked="#selectImage">
+            <Label fx:id="label" text="拖拽图片到此处" textFill="#0000005c" onMouseClicked="#selectImage">
                 <font>
                     <Font size="35.0"/>
                 </font>
