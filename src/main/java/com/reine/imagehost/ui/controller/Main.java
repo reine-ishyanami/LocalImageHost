@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.layout.Pane;
 import javafx.stage.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +175,16 @@ public class Main {
     }
 
     /**
+     * 显示图片的最大宽度
+     */
+    private double ivMaxWidth;
+
+    /**
+     * 显示图片的最大高度
+     */
+    private double ivMaxHeight;
+
+    /**
      * 控制图片的显示区域
      *
      * @param url 图片路径
@@ -182,10 +193,14 @@ public class Main {
         Image image = new Image(url);
         ivImage.setPreserveRatio(true);
         // 设置不超过图片展示区域
-        if (image.getWidth() > image.getHeight()) {
+        double width = image.getWidth();
+        double height = image.getHeight();
+        if (width > ivMaxWidth || height > ivMaxHeight) {
             ivImage.setFitWidth(400);
-        } else {
             ivImage.setFitHeight(250);
+        }else {
+            ivImage.setFitWidth(0);
+            ivImage.setFitHeight(0);
         }
         ivImage.setImage(image);
     }
@@ -196,6 +211,9 @@ public class Main {
     @FXML
     void initialize() {
         fileService.createTable();
+        Pane pane = (Pane) ivImage.getParent();
+        this.ivMaxWidth = pane.getPrefWidth();
+        this.ivMaxHeight = pane.getPrefHeight();
         if (originPath != null) {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
