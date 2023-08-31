@@ -13,7 +13,7 @@ public class LocalImageHostApplication {
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("是否启动图形界面y/n（默认n）: ");
+            System.out.print("是否启动图形界面y/n（默认n）: ");
             inputLoop:
             while (true) {
                 switch (scanner.nextLine()) {
@@ -27,7 +27,7 @@ public class LocalImageHostApplication {
                         AppUI.main(new String[]{});
                         break inputLoop;
                     }
-                    default -> System.out.println("输入有误，请重新选择是否启动图形界面y/n（默认n）: ");
+                    default -> System.out.print("输入有误，请重新选择是否启动图形界面y/n（默认n）: ");
                 }
             }
         }

@@ -3,6 +3,9 @@ package com.reine.imagehost.ui.controller;
 import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -11,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.*;
 import lombok.extern.slf4j.Slf4j;
@@ -178,6 +182,20 @@ public class Main {
         });
     }
 
+    @FXML
+    void onMouseEntered(MouseEvent event){
+        Node source = (Node) event.getSource();
+        Scene scene = source.getScene();
+        scene.setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void onMouseExited(MouseEvent event){
+        Node source = (Node) event.getSource();
+        Scene scene = source.getScene();
+        scene.setCursor(Cursor.DEFAULT);
+    }
+
     /**
      * 显示图片的最大宽度
      */
@@ -202,7 +220,7 @@ public class Main {
         if (width > ivMaxWidth || height > ivMaxHeight) {
             ivImage.setFitWidth(400);
             ivImage.setFitHeight(250);
-        }else {
+        } else {
             ivImage.setFitWidth(0);
             ivImage.setFitHeight(0);
         }
