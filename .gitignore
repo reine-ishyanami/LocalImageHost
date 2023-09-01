@@ -32,5 +32,3 @@ hs_err_pid*
 out
 gen
 target
-package-prod.bat
-!/imgUrl.db

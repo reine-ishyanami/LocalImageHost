@@ -41,7 +41,7 @@ public class Result<T> {
 
     public static <T> Result<T> fail(String message) {
         return new Result<T>()
-                .setSuccess(true)
+                .setSuccess(false)
                 .setMessage(message);
     }
 
