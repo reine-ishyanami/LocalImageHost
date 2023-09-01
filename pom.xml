@@ -16,6 +16,12 @@
     <properties>
         <java.version>17</java.version>
         <maven.test.skip>true</maven.test.skip>
+        <knife4j.version>4.1.0</knife4j.version>
+        <javafx.version>17.0.6</javafx.version>
+        <lombok.version>1.18.28</lombok.version>
+        <servlet.version>4.0.1</servlet.version>
+        <mybatis.version>3.0.1</mybatis.version>
+        <sqlite.version>3.36.0.3</sqlite.version>
     </properties>
     <dependencies>
         <!--SpringBoot-->
@@ -31,50 +37,49 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
         <!--knife4j-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>4.1.0</version>
+            <version>${knife4j.version}</version>
         </dependency>
         <!--javafx-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>17.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
+            <version>${lombok.version}</version>
             <scope>compile</scope>
         </dependency>
         <!--servlet-api-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <version>${servlet.version}</version>
         </dependency>
         <!--mybatis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>3.0.1</version>
+            <version>${mybatis.version}</version>
         </dependency>
         <!--sqlite-->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.3</version>
+            <version>${sqlite.version}</version>
         </dependency>
     </dependencies>
 
@@ -92,7 +97,6 @@
             </properties>
         </profile>
     </profiles>
-
     <build>
         <plugins>
             <plugin>
