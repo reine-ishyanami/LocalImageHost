@@ -17,8 +17,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +31,7 @@ import java.util.Optional;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class Main {
 
     @FXML
@@ -61,7 +62,7 @@ public class Main {
     /**
      * 文件及数据库操作服务
      */
-    private FileService fileService;
+    private final FileService fileService;
 
     /**
      * 上传后文件的本地存储位置
@@ -241,10 +242,5 @@ public class Main {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
         }
-    }
-
-    @Autowired
-    public void setFileService(FileService fileService) {
-        this.fileService = fileService;
     }
 }

@@ -4,10 +4,11 @@ import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.mapper.ImgMapper;
+import com.reine.imagehost.utils.AsyncTask;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -26,6 +29,7 @@ import java.util.*;
 @Service
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     @Value("${local.store}")
@@ -37,7 +41,7 @@ public class FileServiceImpl implements FileService {
     @Value("${web.base.path.image}")
     private String webBasePath;
 
-    private ImgMapper imgMapper;
+    private final ImgMapper imgMapper;
 
     @Override
     public Img storeImageGUI(String path, String project, File imgFile) throws Exception {
@@ -117,19 +121,12 @@ public class FileServiceImpl implements FileService {
         return true;
     }
 
+    private final AsyncTask task;
+
     @Override
     public String deleteImage(String project, String imgName) {
-        String filePath = getPath(project, imgName);
-        if (filePath == null) {
-            return "图片不存在";
-        }
-        File file = new File(filePath);
-        if (!file.exists()) {
-            return "图片不存在";
-        } else {
-            file.delete();
-            return deleteImageInfo(project, imgName);
-        }
+        task.deleteImageInStorage(getPath(project, imgName));
+        return deleteImageInfo(project, imgName);
     }
 
     @Override
@@ -222,12 +219,6 @@ public class FileServiceImpl implements FileService {
      */
     private String deleteImageInfo(String project, String fileName) {
         Integer integer = imgMapper.deleteImg(project, fileName);
-        return integer != null ? null : "图片数据不存在";
+        return integer > 0 ? null : "图片数据不存在";
     }
-
-    @Autowired
-    public void setImgMapper(ImgMapper imgMapper) {
-        this.imgMapper = imgMapper;
-    }
-
 }
