@@ -50,7 +50,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             stage.getIcons().add(new Image(icon.getURL().toString()));
             stage.setScene(new Scene(root));
             stage.show();
-
             // 最大化
             stage.maximizedProperty().addListener((observable, oldValue, newValue) -> stage.setFullScreen(newValue));
             // 全屏

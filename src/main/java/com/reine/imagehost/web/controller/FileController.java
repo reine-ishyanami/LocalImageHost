@@ -11,12 +11,13 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -28,9 +29,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/${web.base.path.image}")
 @Tag(name = "FileController", description = "图片操作")
+@RequiredArgsConstructor
 public class FileController {
 
-    private FileService fileService;
+    private final FileService fileService;
 
     /**
      * 查询已上传的所有图片
@@ -145,15 +147,10 @@ public class FileController {
         File file = null;
         if (originalFilename != null) {
             String[] filename = originalFilename.split("\\.");
-            file = File.createTempFile(filename[0], "." + filename[1]);
+            file = Files.createTempFile(filename[0], "." + filename[1]).toFile();
             multipartFile.transferTo(file);
             file.deleteOnExit();
         }
         return file;
-    }
-
-    @Autowired
-    public void setFileService(FileService fileService) {
-        this.fileService = fileService;
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class AppUI extends Application {
     private ConfigurableApplicationContext applicationContext;
 
-
     @Override
     public void start(Stage stage) {
         applicationContext.publishEvent(new StageReadyEvent(stage));
