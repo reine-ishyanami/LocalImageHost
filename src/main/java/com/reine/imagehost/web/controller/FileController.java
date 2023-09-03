@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/${web.base.path.image}")
-@Tag(name = "FileController", description = "图片操作")
+@Tag(name = "图片操作")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -41,7 +41,7 @@ public class FileController {
      * @return
      */
     @GetMapping("/list")
-    @Operation(description = "查询已上传的所有图片")
+    @Operation(summary = "查询已上传的所有图片")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = false, in = ParameterIn.QUERY)
     })
@@ -61,7 +61,7 @@ public class FileController {
      * @return 成功或失败信息
      */
     @PostMapping("/{project}")
-    @Operation(description = "图片上传")
+    @Operation(summary = "图片上传")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgFile", description = "图片文件", required = true, in = ParameterIn.DEFAULT, ref = "imgFile"),
@@ -93,7 +93,7 @@ public class FileController {
      * @return 成功或失败信息
      */
     @GetMapping("/{project}/{imgName}")
-    @Operation(description = "图片读取")
+    @Operation(summary = "图片读取")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
@@ -119,7 +119,7 @@ public class FileController {
      * @return 成功或失败信息
      */
     @DeleteMapping("/{project}/{imgName}")
-    @Operation(description = "删除图片")
+    @Operation(summary = "删除图片")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
             @Parameter(name = "imgName", description = "图片名称", required = true, in = ParameterIn.PATH),
