@@ -1,0 +1,29 @@
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+server:
+  # 监听的端口号
+  port: 8824
+spring:
+  application:
+    # javafx
+    ui:
+      css: classpath:/css/main.css
+      icon: classpath:/image/logo.png
+      title: 上传图片
+      view: classpath:/fxml/main.fxml
+  profiles:
+    # 默认使用开发环境配置
+    active: @profileActive@
+  servlet:
+    # 指定上传文件的最大大小
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 100MB
+# web
+web:
+  base:
+    path:
+      image: image

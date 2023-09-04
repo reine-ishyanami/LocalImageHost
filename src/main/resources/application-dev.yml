@@ -1,0 +1,18 @@
+# 文件存储路径
+local:
+  store: E:/pic-bed
+# 日志级别
+logging:
+  level:
+    com:
+      reine:
+        imagehost: debug
+# mybatis日志
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+spring:
+  # sqlite数据库
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:imgUrl.db
