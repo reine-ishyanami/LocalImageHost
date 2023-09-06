@@ -18,10 +18,8 @@ public class AppUI extends Application {
     @Override
     public void start(Stage stage) {
         URL fxmlUrl = getClass().getResource("/fxml/main.fxml");
-        URL cssUrl = getClass().getResource("/css/main.css");
-        URL iconUrl = getClass().getResource("/image/logo.png");
         String title = "上传图片";
-        EventProperty eventProperty = new EventProperty(stage, fxmlUrl, iconUrl, cssUrl, title);
+        EventProperty eventProperty = new EventProperty(stage, fxmlUrl, null, null, title);
         applicationContext.publishEvent(new StageReadyEvent(eventProperty));
     }
 
