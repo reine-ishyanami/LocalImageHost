@@ -8,6 +8,7 @@ import com.reine.imagehost.utils.AsyncTask;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,8 @@ public class FileServiceImpl implements FileService {
     private final ImgMapper imgMapper;
 
     @Override
-    public Img storeImageGUI(String path, String project, File imgFile) throws Exception {
-        String fileName = imgFile.getName();
+    public Img storeImageGUI(String path, String project, String name, File imgFile) throws Exception {
+        String fileName = StringUtils.isBlank(name) ? imgFile.getName() : name;
         String storePath = path + File.separator + project;
         // 拼接文件路径
         File file = createFile(project, fileName, storePath);
