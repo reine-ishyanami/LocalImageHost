@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.imagehost.ui.controller.Main">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.imagehost.ui.controller.Main">
     <center>
-        <StackPane onMouseClicked="#selectImage" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <StackPane onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" onMouseClicked="#selectImage" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <Label fx:id="label" text="拖拽图片到此处" textFill="#0000005c">
                 <font>
                     <Font size="35.0" />
@@ -28,7 +28,8 @@
     <bottom>
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
             <HBox alignment="CENTER" spacing="50.0">
-                <TextField fx:id="tfProject" prefHeight="30.0" prefWidth="398.0" />
+                <TextField fx:id="tfProject" prefHeight="30.0" prefWidth="153.0" promptText="项目名称" />
+            <TextField fx:id="tfName" layoutX="66.0" layoutY="10.0" prefHeight="30.0" prefWidth="212.0" promptText="图片名称" />
                 <Button mnemonicParsing="false" onAction="#uploadFile" text="上传" />
             </HBox>
             <TextField fx:id="tfInfo" editable="false" visible="false" />
@@ -36,7 +37,8 @@
     </bottom>
     <top>
         <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
-            <TextField fx:id="tfPath" editable="false" prefHeight="30.0" prefWidth="398.0" />
+         <Button mnemonicParsing="false" onAction="#showImageList" text="查看图片列表" />
+            <TextField fx:id="tfPath" editable="false" prefHeight="30.0" prefWidth="289.0" promptText="存储路径" />
             <Button mnemonicParsing="false" onAction="#updatePath" text="修改" />
             <BorderPane.margin>
                 <Insets top="10.0" />

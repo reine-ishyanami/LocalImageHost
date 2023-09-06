@@ -2,6 +2,7 @@ package com.reine.imagehost.ui.controller;
 
 import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -33,9 +34,11 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class Main {
-
     @FXML
     public TextField tfPath;
+
+    @FXML
+    public TextField tfName;
 
     @FXML
     private TextField tfProject;
@@ -116,7 +119,8 @@ public class Main {
             return;
         }
         String path = tfPath.getText();
-        Img img = fileService.storeImageGUI(path, projectText, file);
+        String nameText = tfName.getText();
+        Img img = fileService.storeImageGUI(path, projectText, nameText, file);
         if (img != null) {
             tfInfo.setVisible(true);
             String project = img.getProject();
@@ -184,14 +188,14 @@ public class Main {
     }
 
     @FXML
-    void onMouseEntered(MouseEvent event){
+    void onMouseEntered(MouseEvent event) {
         Node source = (Node) event.getSource();
         Scene scene = source.getScene();
         scene.setCursor(Cursor.HAND);
     }
 
     @FXML
-    void onMouseExited(MouseEvent event){
+    void onMouseExited(MouseEvent event) {
         Node source = (Node) event.getSource();
         Scene scene = source.getScene();
         scene.setCursor(Cursor.DEFAULT);
@@ -242,5 +246,14 @@ public class Main {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
         }
+    }
+
+    /**
+     * 查看图片列表
+     * @param actionEvent
+     */
+    @FXML
+    void showImageList(ActionEvent actionEvent) {
+
     }
 }

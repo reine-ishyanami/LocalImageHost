@@ -17,11 +17,12 @@ public interface FileService {
      *
      * @param path    保存路径
      * @param project 项目名
+     * @param name
      * @param imgFile 文件
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Img storeImageGUI(String path, String project, File imgFile) throws Exception;
+    Img storeImageGUI(String path, String project,String name, File imgFile) throws Exception;
 
     /**
      * RestAPI文件上传
