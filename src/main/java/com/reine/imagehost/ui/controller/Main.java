@@ -2,6 +2,8 @@ package com.reine.imagehost.ui.controller;
 
 import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
+import com.reine.imagehost.ui.EventProperty;
+import com.reine.imagehost.ui.StageReadyEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -21,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Optional;
 
 /**
@@ -240,5 +243,10 @@ public class Main {
      */
     @FXML
     void showImageList(ActionEvent actionEvent) {
+        Stage listStage = new Stage();
+        URL fxmlUrl = getClass().getResource("/fxml/image-list.fxml");
+        String title = "图片查询";
+        EventProperty eventProperty = new EventProperty(listStage, fxmlUrl, null, null, title);
+        context.publishEvent(new StageReadyEvent(eventProperty));
     }
 }
