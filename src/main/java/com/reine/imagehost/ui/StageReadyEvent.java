@@ -1,14 +1,13 @@
 package com.reine.imagehost.ui;
 
-import javafx.stage.Stage;
 import org.springframework.context.ApplicationEvent;
 
 public class StageReadyEvent extends ApplicationEvent {
-    public StageReadyEvent(Stage stage) {
-        super(stage);
+    public StageReadyEvent(EventProperty property) {
+        super(property);
     }
 
-    public Stage getStage() {
-        return (Stage) getSource();
+    public EventProperty getProperty() {
+        return (EventProperty) getSource();
     }
 }

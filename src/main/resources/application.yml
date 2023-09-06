@@ -7,13 +7,6 @@ server:
   # 监听的端口号
   port: 8824
 spring:
-  application:
-    # javafx
-    ui:
-      css: classpath:/css/main.css
-      icon: classpath:/image/logo.png
-      title: 上传图片
-      view: classpath:/fxml/main.fxml
   profiles:
     # 默认使用开发环境配置
     active: @profileActive@
