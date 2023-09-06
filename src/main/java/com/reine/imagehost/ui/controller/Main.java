@@ -4,9 +4,6 @@ import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -15,12 +12,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -187,20 +184,6 @@ public class Main {
         });
     }
 
-    @FXML
-    void onMouseEntered(MouseEvent event) {
-        Node source = (Node) event.getSource();
-        Scene scene = source.getScene();
-        scene.setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    void onMouseExited(MouseEvent event) {
-        Node source = (Node) event.getSource();
-        Scene scene = source.getScene();
-        scene.setCursor(Cursor.DEFAULT);
-    }
-
     /**
      * 显示图片的最大宽度
      */
@@ -248,12 +231,14 @@ public class Main {
         }
     }
 
+    private final ApplicationContext context;
+
     /**
      * 查看图片列表
+     *
      * @param actionEvent
      */
     @FXML
     void showImageList(ActionEvent actionEvent) {
-
     }
 }

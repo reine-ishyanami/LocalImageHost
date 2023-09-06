@@ -7,6 +7,11 @@ server:
   # 监听的端口号
   port: 8824
 spring:
+  application:
+    ui:
+      default-css: classpath:/css/default.css
+      default-icon: classpath:/image/logo.png
+      default-title: 上传图片
   profiles:
     # 默认使用开发环境配置
     active: @profileActive@
