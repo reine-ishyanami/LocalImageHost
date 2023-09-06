@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.imagehost.ui.controller.Main">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.imagehost.ui.controller.MainUIController">
     <center>
         <StackPane onDragDropped="#boxDragDropped" onDragOver="#boxDragOver" onMouseClicked="#selectImage" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <Label fx:id="label" text="拖拽图片到此处" textFill="#0000005c">

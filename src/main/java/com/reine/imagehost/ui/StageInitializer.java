@@ -51,9 +51,9 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             stage.show();
             if (this.mainStage == null) this.mainStage = stage;
             // 最大化
-            stage.maximizedProperty().addListener((observable, oldValue, newValue) -> stage.setFullScreen(newValue));
+//            stage.maximizedProperty().addListener((observable, oldValue, newValue) -> stage.setFullScreen(newValue));
             // 全屏
-            stage.fullScreenProperty().addListener((observable, oldValue, newValue) -> stage.setMaximized(newValue));
+//            stage.fullScreenProperty().addListener((observable, oldValue, newValue) -> stage.setMaximized(newValue));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

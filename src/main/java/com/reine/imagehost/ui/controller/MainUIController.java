@@ -33,7 +33,7 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class Main {
+public class MainUIController {
     @FXML
     public TextField tfPath;
 
@@ -244,7 +244,7 @@ public class Main {
     @FXML
     void showImageList(ActionEvent actionEvent) {
         Stage listStage = new Stage();
-        URL fxmlUrl = getClass().getResource("/fxml/image-list.fxml");
+        URL fxmlUrl = getClass().getResource("/fxml/table.fxml");
         String title = "图片查询";
         EventProperty eventProperty = new EventProperty(listStage, fxmlUrl, null, null, title);
         context.publishEvent(new StageReadyEvent(eventProperty));
