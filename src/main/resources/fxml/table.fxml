@@ -6,26 +6,43 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
-
-<VBox prefHeight="509.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reine.imagehost.ui.controller.TableUIController">
-   <children>
+<VBox prefHeight="509.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.reine.imagehost.ui.controller.TableUIController">
+    <children>
         <HBox alignment="CENTER" prefHeight="54.0" prefWidth="800.0" spacing="10.0">
             <children>
-                <TextField fx:id="tfId" promptText="请输入ID" />
-                <TextField fx:id="tfProject" promptText="请输入项目名称" />
-                <TextField fx:id="tfName" promptText="请输入图片名称" />
-                <Button mnemonicParsing="false" onAction="#search" text="搜索" />
-                <Button mnemonicParsing="false" onAction="#clear" text="清空" />
+                <TextField fx:id="tfId" promptText="请输入ID"/>
+                <TextField fx:id="tfProject" promptText="请输入项目名称"/>
+                <TextField fx:id="tfName" promptText="请输入图片名称"/>
+                <Button mnemonicParsing="false" onAction="#search" text="搜索"/>
+                <Button mnemonicParsing="false" onAction="#clear" text="清空"/>
             </children>
         </HBox>
         <TableView fx:id="tbImageList" editable="true" prefHeight="417.0" prefWidth="814.0">
             <columns>
-                <TableColumn fx:id="idColumn" editable="false" prefWidth="100.0" text="ID" />
-                <TableColumn fx:id="projectColumn" prefWidth="150.0" sortable="false" text="项目名称" />
-                <TableColumn fx:id="nameColumn" prefWidth="150.0" sortable="false" text="图片名称" />
-                <TableColumn fx:id="pathColumn" editable="false"  prefWidth="390.0" sortable="false" text="存储路径" />
+                <TableColumn fx:id="idColumn" editable="false" prefWidth="100.0" text="ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="projectColumn" prefWidth="150.0" sortable="false" text="项目名称">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="project"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="nameColumn" prefWidth="150.0" sortable="false" text="图片名称">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="name"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="pathColumn" editable="false" prefWidth="390.0" sortable="false" text="存储路径">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="path"/>
+                    </cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
-   </children>
+    </children>
 </VBox>

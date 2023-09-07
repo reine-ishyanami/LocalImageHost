@@ -12,9 +12,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -52,27 +52,21 @@ public class TableUIController {
 
     @FXML
     void clear(ActionEvent event) {
-
+        tfId.clear();
+        tfName.clear();
+        tfProject.clear();
     }
 
     @FXML
     void search(ActionEvent event) {
-
     }
 
     @FXML
     void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        projectColumn.setCellValueFactory(new PropertyValueFactory<>("project"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        pathColumn.setCellValueFactory(new PropertyValueFactory<>("path"));
         List<ImageWithUrl> imageWithUrls = fileService.listImage(null);
         List<SimpleImageProperty> list = imageWithUrls.stream().map((imageWithUrl) -> {
             SimpleImageProperty imageProperty = new SimpleImageProperty();
-            imageProperty.setId(imageWithUrl.getId());
-            imageProperty.setProject(imageWithUrl.getProject());
-            imageProperty.setName(imageWithUrl.getName());
-            imageProperty.setPath(imageWithUrl.getPath());
+            BeanUtils.copyProperties(imageWithUrl, imageProperty);
             return imageProperty;
         }).toList();
         ObservableList<SimpleImageProperty> observableList = FXCollections.observableList(list);
