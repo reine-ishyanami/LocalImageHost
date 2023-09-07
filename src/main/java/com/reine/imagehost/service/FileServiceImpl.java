@@ -150,6 +150,11 @@ public class FileServiceImpl implements FileService {
         return imageWithUrls;
     }
 
+    @Override
+    public List<Image> queryImageList(String id, String project, String name) {
+        return imgMapper.queryImageListByIdAndProjectAndName(id, project, name);
+    }
+
     /**
      * 关闭流
      *

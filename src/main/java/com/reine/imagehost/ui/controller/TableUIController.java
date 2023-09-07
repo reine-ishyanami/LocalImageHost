@@ -1,5 +1,6 @@
 package com.reine.imagehost.ui.controller;
 
+import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.entity.SimpleImageProperty;
 import com.reine.imagehost.service.FileService;
@@ -60,7 +61,11 @@ public class TableUIController {
 
     @FXML
     void search(ActionEvent event) {
-
+        String id = tfId.getText();
+        String project = tfProject.getText();
+        String name = tfName.getText();
+        List<Image> images = fileService.queryImageList(id, project, name);
+        updateTableItem(images);
     }
 
     @FXML
@@ -71,12 +76,17 @@ public class TableUIController {
             else return change;
         }));
         List<ImageWithUrl> imageWithUrls = fileService.listImage(null);
-        List<SimpleImageProperty> list = imageWithUrls.stream().map((imageWithUrl) -> {
+        updateTableItem(imageWithUrls);
+    }
+
+    private void updateTableItem(List<? extends Image> images){
+        List<SimpleImageProperty> list = images.stream().map((image) -> {
             SimpleImageProperty imageProperty = new SimpleImageProperty();
-            BeanUtils.copyProperties(imageWithUrl, imageProperty);
+            BeanUtils.copyProperties(image, imageProperty);
             return imageProperty;
         }).toList();
         ObservableList<SimpleImageProperty> observableList = FXCollections.observableList(list);
+        tbImageList.getItems().clear();
         tbImageList.getItems().addAll(observableList);
     }
 

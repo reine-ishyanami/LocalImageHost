@@ -1,5 +1,6 @@
 package com.reine.imagehost.service;
 
+import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.entity.Img;
 import jakarta.servlet.http.HttpServletResponse;
@@ -66,4 +67,13 @@ public interface FileService {
      * @return 图片列表
      */
     List<ImageWithUrl> listImage(String project);
+
+    /**
+     * 根据id，project，name查询图片
+     * @param id
+     * @param project
+     * @param name
+     * @return
+     */
+    List<Image> queryImageList(String id, String project, String name);
 }

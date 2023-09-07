@@ -40,6 +40,21 @@
             </if>
         </where>
     </select>
+    <select id="queryImageListByIdAndProjectAndName" resultType="com.reine.imagehost.entity.Image">
+        SELECT *
+        FROM "imgUrl"
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="project != null and project != ''">
+                and project like '%' || #{project} || '%'
+            </if>
+            <if test="name != null and name != ''">
+                and name like '%' || #{name} || '%'
+            </if>
+        </where>
+    </select>
     <insert id="storeImg" parameterType="com.reine.imagehost.entity.Image">
         INSERT INTO "imgUrl"(path, project, name)
         VALUES (#{path}, #{project}, #{name})
