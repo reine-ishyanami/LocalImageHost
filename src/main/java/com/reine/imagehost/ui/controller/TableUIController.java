@@ -6,10 +6,10 @@ import com.reine.imagehost.service.FileService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -102,8 +102,34 @@ public class TableUIController {
         }
     }
 
-    private void resetNotice(){
+    private void resetNotice() {
         lbNotice.setStyle("-fx-background-color: #00000000;");
         lbNotice.setText("");
+    }
+
+    @Value("${server.port}")
+    private Integer port;
+
+    @Value("${web.base.path.image}")
+    private String webBasePath;
+
+    /**
+     * 双击复制web访问链接
+     * @param event
+     */
+    @FXML
+    void copyUrlByDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2 && event.getButton().equals(MouseButton.PRIMARY)) {
+            Image selectedItem = tbImageList.getSelectionModel().getSelectedItem();
+            Optional.ofNullable(selectedItem).ifPresent(image -> {
+                String url = String.format("http://localhost:%d/%s/%s/%s", port, webBasePath, image.getProject(), image.getName());
+                Clipboard systemClipboard = Clipboard.getSystemClipboard();
+                ClipboardContent clipboardContent = new ClipboardContent();
+                clipboardContent.putString(url);
+                systemClipboard.setContent(clipboardContent);
+                lbNotice.setStyle("-fx-background-color: green;");
+                lbNotice.setText("已复制图片访问链接到剪贴板");
+            });
+        }
     }
 }
