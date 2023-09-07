@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -59,10 +60,16 @@ public class TableUIController {
 
     @FXML
     void search(ActionEvent event) {
+
     }
 
     @FXML
     void initialize() {
+        // 限制id框输入
+        tfId.setTextFormatter(new TextFormatter<String>(change -> {
+            if (change.isAdded() && !change.getText().matches("\\d")) return null;
+            else return change;
+        }));
         List<ImageWithUrl> imageWithUrls = fileService.listImage(null);
         List<SimpleImageProperty> list = imageWithUrls.stream().map((imageWithUrl) -> {
             SimpleImageProperty imageProperty = new SimpleImageProperty();
