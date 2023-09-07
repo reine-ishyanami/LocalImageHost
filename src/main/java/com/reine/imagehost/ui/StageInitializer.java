@@ -44,16 +44,14 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             loader.setControllerFactory(applicationContext::getBean);
             Parent root = loader.load();
             root.getStylesheets().add(Optional.ofNullable(property.cssUrl()).orElse(defaultCss.getURL()).toString());
-            Stage stage = property.stage();
+            Stage stage = Optional.ofNullable(property.stage()).orElse(mainStage);
             stage.setTitle(Optional.ofNullable(property.title()).orElse(defaultTitle));
-            stage.getIcons().add(new Image(Optional.ofNullable(property.iconUrl()).orElse(defaultIcon.getURL()).toString()));
+            stage.getIcons().add(
+                    new Image(Optional.ofNullable(property.iconUrl()).orElse(defaultIcon.getURL()).toString())
+            );
             stage.setScene(new Scene(root));
             stage.show();
             if (this.mainStage == null) this.mainStage = stage;
-            // 最大化
-//            stage.maximizedProperty().addListener((observable, oldValue, newValue) -> stage.setFullScreen(newValue));
-            // 全屏
-//            stage.fullScreenProperty().addListener((observable, oldValue, newValue) -> stage.setMaximized(newValue));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
