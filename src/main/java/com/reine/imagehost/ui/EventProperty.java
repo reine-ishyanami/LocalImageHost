@@ -8,6 +8,6 @@ import java.net.URL;
 /**
  * @author reine
  */
-public record EventProperty(Stage stage, URL fxmlUrl, @Nullable URL iconUrl, @Nullable URL cssUrl,
+public record EventProperty(@Nullable Stage stage, URL fxmlUrl, @Nullable URL iconUrl, @Nullable URL cssUrl,
                             @Nullable String title) {
 }
