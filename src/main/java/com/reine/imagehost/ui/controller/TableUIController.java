@@ -2,24 +2,18 @@ package com.reine.imagehost.ui.controller;
 
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
-import com.reine.imagehost.entity.SimpleImageProperty;
 import com.reine.imagehost.service.FileService;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,19 +21,22 @@ import java.util.List;
 public class TableUIController {
 
     @FXML
-    private TableView<SimpleImageProperty> tbImageList;
+    private Label lbNotice;
 
     @FXML
-    private TableColumn<SimpleImageProperty, SimpleIntegerProperty> idColumn;
+    private TableView<Image> tbImageList;
 
     @FXML
-    private TableColumn<SimpleImageProperty, SimpleStringProperty> projectColumn;
+    private TableColumn<Image, Integer> idColumn;
 
     @FXML
-    private TableColumn<SimpleImageProperty, SimpleStringProperty> nameColumn;
+    private TableColumn<Image, String> projectColumn;
 
     @FXML
-    private TableColumn<SimpleImageProperty, SimpleStringProperty> pathColumn;
+    private TableColumn<Image, String> nameColumn;
+
+    @FXML
+    private TableColumn<Image, String> pathColumn;
 
     @FXML
     private TextField tfId;
@@ -79,15 +76,34 @@ public class TableUIController {
         updateTableItem(imageWithUrls);
     }
 
-    private void updateTableItem(List<? extends Image> images){
-        List<SimpleImageProperty> list = images.stream().map((image) -> {
-            SimpleImageProperty imageProperty = new SimpleImageProperty();
-            BeanUtils.copyProperties(image, imageProperty);
-            return imageProperty;
-        }).toList();
-        ObservableList<SimpleImageProperty> observableList = FXCollections.observableList(list);
+    private void updateTableItem(List<? extends Image> images) {
+        resetNotice();
         tbImageList.getItems().clear();
-        tbImageList.getItems().addAll(observableList);
+        tbImageList.getItems().addAll(images);
     }
 
+    /**
+     * 删除具体某项
+     *
+     * @param keyEvent
+     */
+    @FXML
+    void removeColumnByDeleteKey(KeyEvent keyEvent) {
+        resetNotice();
+        if (keyEvent.getCode().equals(KeyCode.DELETE)) {
+            Image selectedItem = tbImageList.getSelectionModel().getSelectedItem();
+            Optional.ofNullable(selectedItem).ifPresentOrElse(image -> {
+                fileService.deleteImage(image.getProject(), image.getName());
+                updateTableItem(fileService.listImage(null));
+            }, () -> {
+                lbNotice.setStyle("-fx-background-color: red;");
+                lbNotice.setText("请先选中表格项再进行删除操作");
+            });
+        }
+    }
+
+    private void resetNotice(){
+        lbNotice.setStyle("-fx-background-color: #00000000;");
+        lbNotice.setText("");
+    }
 }
