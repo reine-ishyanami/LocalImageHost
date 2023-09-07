@@ -46,4 +46,13 @@ public interface ImgMapper {
      * @return 图片列表
      */
     List<Image> listImg(String project);
+
+    /**
+     * 根据id，project，name查询图片列表
+     * @param id
+     * @param project
+     * @param name
+     * @return
+     */
+    List<Image> queryImageListByIdAndProjectAndName(String id, String project, String name);
 }
