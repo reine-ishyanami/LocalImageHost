@@ -3,10 +3,12 @@ package com.reine.imagehost.ui.controller;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.service.FileService;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.util.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +67,8 @@ public class TableUIController {
         updateTableItem(images);
     }
 
+    private final FadeTransition ft = new FadeTransition();
+
     @FXML
     void initialize() {
         // 限制id框输入
@@ -74,10 +78,13 @@ public class TableUIController {
         }));
         List<ImageWithUrl> imageWithUrls = fileService.listImage(null);
         updateTableItem(imageWithUrls);
+        ft.setDuration(Duration.seconds(4));
+        ft.setNode(lbNotice);
+        ft.setFromValue(1);
+        ft.setToValue(0);
     }
 
     private void updateTableItem(List<? extends Image> images) {
-        resetNotice();
         tbImageList.getItems().clear();
         tbImageList.getItems().addAll(images);
     }
@@ -89,7 +96,6 @@ public class TableUIController {
      */
     @FXML
     void removeColumnByDeleteKey(KeyEvent keyEvent) {
-        resetNotice();
         if (keyEvent.getCode().equals(KeyCode.DELETE)) {
             Image selectedItem = tbImageList.getSelectionModel().getSelectedItem();
             Optional.ofNullable(selectedItem).ifPresentOrElse(image -> {
@@ -98,13 +104,9 @@ public class TableUIController {
             }, () -> {
                 lbNotice.setStyle("-fx-background-color: red;");
                 lbNotice.setText("请先选中表格项再进行删除操作");
+                ft.playFromStart();
             });
         }
-    }
-
-    private void resetNotice() {
-        lbNotice.setStyle("-fx-background-color: #00000000;");
-        lbNotice.setText("");
     }
 
     @Value("${server.port}")
@@ -129,6 +131,7 @@ public class TableUIController {
                 systemClipboard.setContent(clipboardContent);
                 lbNotice.setStyle("-fx-background-color: green;");
                 lbNotice.setText("已复制图片访问链接到剪贴板");
+                ft.playFromStart();
             });
         }
     }
