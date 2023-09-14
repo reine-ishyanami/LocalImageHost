@@ -242,6 +242,7 @@ public class MainUIController {
     @FXML
     void showImageList() {
         Stage listStage = new Stage();
+        listStage.setResizable(false);
         listStage.setOnShowing(event -> showBtn.setDisable(true));
         listStage.setOnCloseRequest(event -> showBtn.setDisable(false));
         URL fxmlUrl = getClass().getResource("/fxml/table.fxml");

@@ -19,6 +19,7 @@ public class AppUI extends Application {
     public void start(Stage stage) {
         URL fxmlUrl = getClass().getResource("/fxml/main.fxml");
         String title = "上传图片";
+        stage.setResizable(false);
         EventProperty eventProperty = new EventProperty(stage, fxmlUrl, null, null, title);
         applicationContext.publishEvent(new StageReadyEvent(eventProperty));
     }
