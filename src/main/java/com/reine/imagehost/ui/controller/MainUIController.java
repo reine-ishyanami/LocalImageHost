@@ -4,12 +4,8 @@ import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.service.FileService;
 import com.reine.imagehost.ui.EventProperty;
 import com.reine.imagehost.ui.StageReadyEvent;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -39,6 +35,9 @@ public class MainUIController {
 
     @FXML
     public TextField tfName;
+
+    @FXML
+    public Button showBtn;
 
     @FXML
     private TextField tfProject;
@@ -239,11 +238,12 @@ public class MainUIController {
     /**
      * 查看图片列表
      *
-     * @param actionEvent
      */
     @FXML
-    void showImageList(ActionEvent actionEvent) {
+    void showImageList() {
         Stage listStage = new Stage();
+        listStage.setOnShowing(event -> showBtn.setDisable(true));
+        listStage.setOnCloseRequest(event -> showBtn.setDisable(false));
         URL fxmlUrl = getClass().getResource("/fxml/table.fxml");
         String title = "图片查询";
         EventProperty eventProperty = new EventProperty(listStage, fxmlUrl, null, null, title);

@@ -41,7 +41,7 @@
     </bottom>
     <top>
         <HBox alignment="CENTER" spacing="50.0" BorderPane.alignment="CENTER">
-         <Button mnemonicParsing="false" onAction="#showImageList" text="查看图片列表" />
+         <Button mnemonicParsing="false" onAction="#showImageList" text="查看图片列表" fx:id="showBtn"/>
             <TextField fx:id="tfPath" editable="false" prefHeight="30.0" prefWidth="289.0" promptText="存储路径" />
             <Button mnemonicParsing="false" onAction="#updatePath" text="修改" />
             <BorderPane.margin>
