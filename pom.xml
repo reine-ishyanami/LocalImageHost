@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.reine</groupId>
     <artifactId>LocalImageHost</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
     <name>LocalImageHost</name>
     <description>LocalImageHost</description>
     <properties>
