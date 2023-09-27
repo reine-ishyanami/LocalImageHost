@@ -96,6 +96,12 @@
                 <profileActive>prod</profileActive>
             </properties>
         </profile>
+        <profile>
+            <id>out</id>
+            <properties>
+                <profileActive>out</profileActive>
+            </properties>
+        </profile>
     </profiles>
     <build>
         <plugins>
