@@ -1,6 +1,6 @@
 # LocalImageHost
 
-> v3.5.0
+> v3.6.0
 
 程序启动时可用通过mode参数直接指定启动方式，例如`java -jar -Dmode=gui LocalImageHost.jar`
 

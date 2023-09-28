@@ -32,3 +32,6 @@ hs_err_pid*
 out
 gen
 target
+
+pic-bed/
+imgUrl.db
