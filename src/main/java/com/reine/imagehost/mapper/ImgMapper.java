@@ -13,11 +13,6 @@ import java.util.List;
 public interface ImgMapper {
 
     /**
-     * 创建数据库
-     */
-    void createTable();
-
-    /**
      * 存储图片信息到数据库
      * @param image 图片信息
      * @return 受影响的行数

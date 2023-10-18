@@ -16,3 +16,8 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:imgUrl.db
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:db/init.sql

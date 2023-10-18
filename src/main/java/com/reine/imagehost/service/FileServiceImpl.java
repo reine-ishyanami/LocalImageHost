@@ -131,11 +131,6 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void createTable() {
-        imgMapper.createTable();
-    }
-
-    @Override
     public List<ImageWithUrl> listImage(String project) {
         List<ImageWithUrl> imageWithUrls = new ArrayList<>();
         List<Image> images = imgMapper.listImg(project);

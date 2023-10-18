@@ -54,12 +54,6 @@ public interface FileService {
      * @return 返回信息
      */
     String deleteImage(String project, String imgName);
-
-    /**
-     * 创建数据库
-     */
-    void createTable();
-
     /**
      * 获取项目下所有图片，以及其访问路径
      *

@@ -91,15 +91,15 @@
             </properties>
         </profile>
         <profile>
-            <id>prod</id>
+            <id>embed</id>
             <properties>
-                <profileActive>prod</profileActive>
+                <profileActive>embed</profileActive>
             </properties>
         </profile>
         <profile>
-            <id>out</id>
+            <id>detach</id>
             <properties>
-                <profileActive>out</profileActive>
+                <profileActive>detach</profileActive>
             </properties>
         </profile>
     </profiles>

@@ -223,7 +223,6 @@ public class MainUIController {
      */
     @FXML
     void initialize() {
-        fileService.createTable();
         Pane pane = (Pane) ivImage.getParent();
         this.ivMaxWidth = pane.getPrefWidth();
         this.ivMaxHeight = pane.getPrefHeight();

@@ -1,8 +1,0 @@
-# 文件存储路径
-local:
-  store: pic-bed
-spring:
-  # sqlite数据库
-  datasource:
-    driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:imgUrl.db
