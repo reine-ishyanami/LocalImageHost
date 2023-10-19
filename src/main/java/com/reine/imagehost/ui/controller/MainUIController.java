@@ -241,12 +241,12 @@ public class MainUIController {
     @FXML
     void showImageList() {
         Stage listStage = new Stage();
+        listStage.setTitle("图片查询");
         listStage.setResizable(false);
         listStage.setOnShowing(event -> showBtn.setDisable(true));
         listStage.setOnCloseRequest(event -> showBtn.setDisable(false));
         URL fxmlUrl = getClass().getResource("/fxml/table.fxml");
-        String title = "图片查询";
-        EventProperty eventProperty = new EventProperty(listStage, fxmlUrl, null, null, title);
+        EventProperty eventProperty = new EventProperty(listStage, fxmlUrl, null, null);
         context.publishEvent(new StageReadyEvent(eventProperty));
     }
 }

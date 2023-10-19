@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +30,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     @Value("${spring.application.ui.default-icon}")
     private Resource defaultIcon;
 
-    @Value("${spring.application.ui.default-title}")
-    private String defaultTitle;
-
     private Stage mainStage = null;
 
     private final ApplicationContext applicationContext;
@@ -45,13 +43,19 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             Parent root = loader.load();
             root.getStylesheets().add(Optional.ofNullable(property.cssUrl()).orElse(defaultCss.getURL()).toString());
             Stage stage = Optional.ofNullable(property.stage()).orElse(mainStage);
-            stage.setTitle(Optional.ofNullable(property.title()).orElse(defaultTitle));
+            // 如果主窗口未设置，则将该窗口第一个启动的窗口设置为主窗口
+            if (this.mainStage == null) this.mainStage = stage;
+            // 如果传入的窗口不是已有的主窗口，则将主窗口设置为其父窗口
+            if (!stage.equals(mainStage)) {
+                stage.initOwner(mainStage);
+                // 设置模态窗口
+                stage.initModality(Modality.APPLICATION_MODAL);
+            }
             stage.getIcons().add(
                     new Image(Optional.ofNullable(property.iconUrl()).orElse(defaultIcon.getURL()).toString())
             );
             stage.setScene(new Scene(root));
             stage.show();
-            if (this.mainStage == null) this.mainStage = stage;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
