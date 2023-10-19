@@ -11,7 +11,6 @@ spring:
     ui:
       default-css: classpath:/css/default.css
       default-icon: classpath:/image/logo.png
-      default-title: 上传图片
   profiles:
     # 默认使用开发环境配置
     active: @profileActive@
@@ -20,6 +19,14 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 100MB
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - classpath:db/init.sql
+
 # web
 web:
   base:

@@ -4,10 +4,4 @@ local:
 spring:
   # sqlite数据库
   datasource:
-    driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite::resource:db/imgUrl.db
-  sql:
-    init:
-      mode: always
-      data-locations:
-        - classpath:db/init.sql
