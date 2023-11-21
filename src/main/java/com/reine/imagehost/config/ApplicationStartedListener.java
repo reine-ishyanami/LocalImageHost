@@ -21,6 +21,5 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     public void onApplicationEvent(@Nonnull ApplicationStartedEvent event) {
         // 在应用程序启动后执行的代码
         log.info("Knife4j UI: http://localhost:{}/doc.html", port);
-        // 添加您的自定义逻辑在这里
     }
 }

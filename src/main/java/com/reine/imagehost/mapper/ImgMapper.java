@@ -14,6 +14,7 @@ public interface ImgMapper {
 
     /**
      * 存储图片信息到数据库
+     *
      * @param image 图片信息
      * @return 受影响的行数
      */
@@ -21,22 +22,25 @@ public interface ImgMapper {
 
     /**
      * 通过文件name获取文件path信息
+     *
      * @param project 项目名
-     * @param name 文件名
+     * @param name    文件名
      * @return 文件存储路径
      */
-    String getPath(String project,String name);
+    String getPath(String project, String name);
 
     /**
      * 通过文件name删除文件
+     *
      * @param project 项目名
-     * @param name 文件名
+     * @param name    文件名
      * @return 受影响的行数
      */
-    Integer deleteImg(String project,String name);
+    Integer deleteImg(String project, String name);
 
     /**
      * 查询项目下所有图片
+     *
      * @param project 项目名
      * @return 图片列表
      */
@@ -44,6 +48,7 @@ public interface ImgMapper {
 
     /**
      * 根据id，project，name查询图片列表
+     *
      * @param id
      * @param project
      * @param name

@@ -22,22 +22,22 @@
         </HBox>
         <TableView fx:id="tbImageList" editable="true" onKeyPressed="#removeColumnByDeleteKey" prefHeight="417.0" prefWidth="814.0" onMouseClicked="#copyUrlByDoubleClick">
             <columns>
-                <TableColumn fx:id="idColumn" editable="false" prefWidth="100.0" text="ID">
+                <TableColumn editable="false" prefWidth="100.0" text="ID">
                     <cellValueFactory>
                         <PropertyValueFactory property="id" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="projectColumn" prefWidth="150.0" sortable="false" text="项目名称">
+                <TableColumn prefWidth="150.0" sortable="false" text="项目名称">
                     <cellValueFactory>
                         <PropertyValueFactory property="project" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="nameColumn" prefWidth="150.0" sortable="false" text="图片名称">
+                <TableColumn prefWidth="150.0" sortable="false" text="图片名称">
                     <cellValueFactory>
                         <PropertyValueFactory property="name" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="pathColumn" editable="false" prefWidth="390.0" sortable="false" text="存储路径">
+                <TableColumn editable="false" prefWidth="390.0" sortable="false" text="存储路径">
                     <cellValueFactory>
                         <PropertyValueFactory property="path" />
                     </cellValueFactory>

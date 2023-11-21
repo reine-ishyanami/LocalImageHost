@@ -236,7 +236,6 @@ public class MainUIController {
 
     /**
      * 查看图片列表
-     *
      */
     @FXML
     void showImageList() {

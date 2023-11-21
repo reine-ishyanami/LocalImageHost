@@ -23,7 +23,7 @@ public interface FileService {
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Img storeImageGUI(String path, String project,String name, File imgFile) throws Exception;
+    Img storeImageGUI(String path, String project, String name, File imgFile) throws Exception;
 
     /**
      * RestAPI文件上传
@@ -54,6 +54,7 @@ public interface FileService {
      * @return 返回信息
      */
     String deleteImage(String project, String imgName);
+
     /**
      * 获取项目下所有图片，以及其访问路径
      *
@@ -64,6 +65,7 @@ public interface FileService {
 
     /**
      * 根据id，project，name查询图片
+     *
      * @param id
      * @param project
      * @param name

@@ -29,18 +29,6 @@ public class TableUIController {
     private TableView<Image> tbImageList;
 
     @FXML
-    private TableColumn<Image, Integer> idColumn;
-
-    @FXML
-    private TableColumn<Image, String> projectColumn;
-
-    @FXML
-    private TableColumn<Image, String> nameColumn;
-
-    @FXML
-    private TableColumn<Image, String> pathColumn;
-
-    @FXML
     private TextField tfId;
 
     @FXML
@@ -117,6 +105,7 @@ public class TableUIController {
 
     /**
      * 双击复制web访问链接
+     *
      * @param event
      */
     @FXML
