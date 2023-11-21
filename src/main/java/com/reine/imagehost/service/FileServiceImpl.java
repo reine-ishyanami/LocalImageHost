@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -63,24 +63,18 @@ public class FileServiceImpl implements FileService {
         return copyFileAndGetUrl(project, fileName, file, realpath);
     }
 
+    /**
+     * 保存文件已经返回文件存储信息
+     */
     private Img copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
-        // 数据缓冲区
-        byte[] bs = new byte[1024];
-        // 读取到的数据长度
-        int len;
-        InputStream inputStream = null;
-        FileOutputStream outputStream = null;
-        try {
-            inputStream = Files.newInputStream(Paths.get(realpath));
-            outputStream = new FileOutputStream(file);
-            while ((len = inputStream.read(bs)) != -1) {
-                outputStream.write(bs, 0, len);
-            }
+        try (
+                InputStream inputStream = Files.newInputStream(Paths.get(realpath));
+                FileOutputStream outputStream = new FileOutputStream(file)
+        ) {
+            Streams.copy(inputStream, outputStream, false);
         } catch (IOException e) {
             e.printStackTrace();
             throw new Exception("写入文件失败");
-        } finally {
-            closeStream(inputStream, outputStream);
         }
         Img img = new Img();
         img.setProject(project);
@@ -88,36 +82,28 @@ public class FileServiceImpl implements FileService {
         return img;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private File createFile(String project, String fileName, String storePath) throws Exception {
         File dir = new File(storePath);
         File file = Path.of(storePath, fileName).toFile();
         if (uploadImage(file, project, fileName)) {
             throw new Exception("插入数据库失败");
         }
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        if (!dir.exists()) dir.mkdirs();
         return file;
     }
 
     @Override
     public boolean showImage(String project, String imgName, HttpServletResponse response) {
         String filePath = getPath(project, imgName);
-        FileInputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = new FileInputStream(filePath);
-            int i = inputStream.available();
-            // byte数组用于存放图片字节数据
-            byte[] buffer = new byte[i];
-            inputStream.read(buffer);
-            outputStream = response.getOutputStream();
-            outputStream.write(buffer);
+        try (
+                FileInputStream inputStream = new FileInputStream(filePath);
+                OutputStream outputStream = response.getOutputStream()
+        ) {
+            Streams.copy(inputStream, outputStream, false);
         } catch (IOException | NullPointerException e) {
             log.error("文件不存在");
             return false;
-        } finally {
-            closeStream(inputStream, outputStream);
         }
         return true;
     }
@@ -148,29 +134,6 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<Image> queryImageList(String id, String project, String name) {
         return imgMapper.queryImageListByIdAndProjectAndName(id, project, name);
-    }
-
-    /**
-     * 关闭流
-     *
-     * @param inputStream  输入流
-     * @param outputStream 输出流
-     */
-    private void closeStream(InputStream inputStream, OutputStream outputStream) {
-        Optional.ofNullable(outputStream).ifPresent(fileOutputStream -> {
-            try {
-                fileOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        Optional.ofNullable(inputStream).ifPresent(fileInputStream -> {
-            try {
-                fileInputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     /**

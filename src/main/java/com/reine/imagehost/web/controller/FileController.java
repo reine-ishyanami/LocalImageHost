@@ -43,7 +43,7 @@ public class FileController {
     @GetMapping("/list")
     @Operation(summary = "查询已上传的所有图片")
     @Parameters({
-            @Parameter(name = "project", description = "项目名称", required = false, in = ParameterIn.QUERY)
+            @Parameter(name = "project", description = "项目名称", in = ParameterIn.QUERY)
     })
     public Result<List<ImageWithUrl>> listImage(
             @RequestParam(value = "project", required = false) String project
