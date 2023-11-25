@@ -3,11 +3,18 @@ package com.reine.imagehost.ui.controller;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.service.FileService;
+import com.reine.imagehost.ui.component.DelButton;
 import javafx.animation.FadeTransition;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -58,6 +66,9 @@ public class TableUIController {
     private final FadeTransition ft = new FadeTransition();
 
     @FXML
+    private TableColumn<Image, Void> operation;
+
+    @FXML
     void initialize() {
         // 限制id框输入
         tfId.setTextFormatter(new TextFormatter<String>(change -> {
@@ -70,6 +81,10 @@ public class TableUIController {
         ft.setNode(lbNotice);
         ft.setFromValue(1);
         ft.setToValue(0);
+
+        tbImageList.setColumnResizePolicy(param -> true);
+
+        operation.setCellFactory(column -> new DelButton(fileService));
     }
 
     private void updateTableItem(List<? extends Image> images) {
@@ -90,7 +105,7 @@ public class TableUIController {
                 fileService.deleteImage(image.getProject(), image.getName());
                 updateTableItem(fileService.listImage(null));
             }, () -> {
-                lbNotice.setStyle("-fx-background-color: red;");
+                lbNotice.setStyle("-fx-background-color: #ff6666;");
                 lbNotice.setText("请先选中表格项再进行删除操作");
                 ft.playFromStart();
             });
@@ -118,7 +133,7 @@ public class TableUIController {
                 ClipboardContent clipboardContent = new ClipboardContent();
                 clipboardContent.putString(url);
                 systemClipboard.setContent(clipboardContent);
-                lbNotice.setStyle("-fx-background-color: green;");
+                lbNotice.setStyle("-fx-background-color: #99cc66;");
                 lbNotice.setText("已复制图片访问链接到剪贴板");
                 ft.playFromStart();
             });
