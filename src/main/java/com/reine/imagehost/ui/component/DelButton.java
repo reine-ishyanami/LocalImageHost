@@ -3,12 +3,13 @@ package com.reine.imagehost.ui.component;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.service.FileService;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 
 import java.util.Objects;
 
@@ -39,10 +40,21 @@ public class DelButton extends TableCell<Image, Void> {
             graphic.setCenter(imageView);
             setGraphic(graphic);
             imageView.setOnMouseClicked(e -> {
-                ObservableList<Image> items = getTableView().getItems();
-                Image image = items.get(getIndex());
-                items.remove(image);
-                fileService.deleteImage(image.getProject(), image.getName());
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.initStyle(StageStyle.UNDECORATED);
+                DialogPane dialogPane = dialog.getDialogPane();
+                dialogPane.setContentText("是否删除此图片");
+                dialogPane.setStyle("-fx-border-width: 2.0; -fx-border-color: #0066cc88;");
+                dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+                dialog.showAndWait().ifPresent(buttonType -> {
+                    if (buttonType.equals(ButtonType.OK)) {
+                        ObservableList<Image> items = getTableView().getItems();
+                        Image image = items.get(getIndex());
+                        items.remove(image);
+                        fileService.deleteImage(image.getProject(), image.getName());
+                    }
+                });
             });
         }
     }
