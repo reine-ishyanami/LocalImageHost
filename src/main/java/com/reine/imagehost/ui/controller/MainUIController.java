@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -98,12 +99,29 @@ public class MainUIController {
      */
     @FXML
     void boxDragDropped(DragEvent event) {
+        StackPane pane = (StackPane) event.getSource();
+        pane.getChildren().remove(dragIntoLabel);
+        label.setVisible(true);
         Dragboard dragboard = event.getDragboard();
         if (dragboard.hasUrl()) {
             String url = dragboard.getUrl();
             file = new File(url);
             setIvImage(url);
         }
+    }
+
+    @FXML
+    void boxDragExited(DragEvent event){
+        StackPane pane = (StackPane) event.getSource();
+        pane.getChildren().remove(dragIntoLabel);
+        label.setVisible(true);
+    }
+
+    @FXML
+    void boxDragEntered(DragEvent event){
+        StackPane pane = (StackPane) event.getSource();
+        pane.getChildren().add(dragIntoLabel);
+        label.setVisible(false);
     }
 
     /**
@@ -218,6 +236,8 @@ public class MainUIController {
         label.setText("");
     }
 
+    private Label dragIntoLabel;
+
     /**
      * GUI数据初始化
      */
@@ -230,6 +250,10 @@ public class MainUIController {
             path = new File(originPath);
             tfPath.setText(path.getAbsolutePath());
         }
+
+        dragIntoLabel = new Label();
+        dragIntoLabel.setText("释放图片以上传");
+        dragIntoLabel.setStyle("-fx-font-size: 35.0; -fx-text-fill: #0000005c;");
     }
 
     private final ApplicationContext context;
