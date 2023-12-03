@@ -148,6 +148,19 @@ public class MainUIController {
     }
 
     /**
+     * 清空内容
+     */
+    @FXML
+    void clearContent(){
+        ivImage.setImage(null);
+        label.setText("拖拽图片到此处");
+        tfProject.clear();
+        tfName.clear();
+        tfInfo.clear();
+        tfInfo.setVisible(false);
+    }
+
+    /**
      * 未选择文件就点击上传的错误弹窗
      *
      * @param projectText 项目名称
