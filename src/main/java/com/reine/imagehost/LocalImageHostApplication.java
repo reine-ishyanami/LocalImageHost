@@ -4,11 +4,13 @@ import com.reine.imagehost.ui.AppUI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Optional;
 import java.util.Scanner;
 
 @SpringBootApplication
+@EnableAsync
 @Slf4j
 public class LocalImageHostApplication {
 

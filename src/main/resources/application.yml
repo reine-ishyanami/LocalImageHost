@@ -26,6 +26,9 @@ spring:
       mode: always
       data-locations:
         - classpath:db/init.sql
+  threads:
+    virtual:
+      enabled: true
 
 # web
 web:

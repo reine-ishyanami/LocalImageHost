@@ -15,7 +15,7 @@ import java.nio.file.Path;
 @Slf4j
 public class AsyncTask {
 
-    @Async("asyncTaskExecutor")
+    @Async
     public void deleteImageInStorage(String filePath) {
         try {
             if (filePath != null) {
