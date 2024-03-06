@@ -1,0 +1,27 @@
+name: Build Jar File
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+jobs:
+  build-jar:
+    strategy:
+      matrix:
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package -Pdetach --file pom.xml
+      - name: Upload Jar as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalImageHost-${{ matrix.os }}
+          path: target/*.jar
