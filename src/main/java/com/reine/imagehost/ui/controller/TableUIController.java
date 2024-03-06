@@ -10,8 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.util.Duration;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class TableUIController {
 
@@ -39,6 +38,11 @@ public class TableUIController {
     private TextField tfProject;
 
     private final FileService fileService;
+
+    public TableUIController(@Qualifier("fileServiceGui") FileService fileService) {
+        this.fileService = fileService;
+    }
+
 
     @FXML
     void clear(ActionEvent event) {

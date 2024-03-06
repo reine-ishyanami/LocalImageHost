@@ -13,8 +13,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.*;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,6 @@ import java.util.Optional;
  */
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class MainUIController {
     @FXML
     public TextField tfPath;
@@ -82,6 +81,11 @@ public class MainUIController {
     @Value("${web.base.path.image}")
     private String webBasePath;
 
+    public MainUIController(@Qualifier("fileServiceGui") FileService fileService, ApplicationContext context) {
+        this.fileService = fileService;
+        this.context = context;
+    }
+
     /**
      * 拖拽经过事件
      *
@@ -111,14 +115,14 @@ public class MainUIController {
     }
 
     @FXML
-    void boxDragExited(DragEvent event){
+    void boxDragExited(DragEvent event) {
         StackPane pane = (StackPane) event.getSource();
         pane.getChildren().remove(dragIntoLabel);
         label.setVisible(true);
     }
 
     @FXML
-    void boxDragEntered(DragEvent event){
+    void boxDragEntered(DragEvent event) {
         StackPane pane = (StackPane) event.getSource();
         pane.getChildren().add(dragIntoLabel);
         label.setVisible(false);
@@ -137,7 +141,7 @@ public class MainUIController {
         }
         String path = tfPath.getText();
         String nameText = tfName.getText();
-        Img img = fileService.storeImageGUI(path, projectText, nameText, file);
+        Img img = fileService.storeImage(path, projectText, file, nameText);
         if (img != null) {
             tfInfo.setVisible(true);
             String project = img.getProject();
@@ -151,7 +155,7 @@ public class MainUIController {
      * 清空内容
      */
     @FXML
-    void clearContent(){
+    void clearContent() {
         ivImage.setImage(null);
         label.setText("拖拽图片到此处");
         tfProject.clear();

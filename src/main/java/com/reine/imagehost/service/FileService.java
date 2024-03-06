@@ -3,38 +3,30 @@ package com.reine.imagehost.service;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.entity.Img;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.util.List;
 
 /**
+ * 文件服务接口
  * @author reine
  * 2022/6/30 9:23
  */
 public interface FileService {
-    /**
-     * GUI文件上传
-     *
-     * @param path    保存路径
-     * @param project 项目名
-     * @param name
-     * @param imgFile 文件
-     * @return 文件访问地址
-     * @throws Exception 文件不存在
-     */
-    Img storeImageGUI(String path, String project, String name, File imgFile) throws Exception;
 
     /**
-     * RestAPI文件上传
+     * 文件上传
      *
+     * @param path     保存路径
      * @param project  项目名
      * @param imgFile  文件
      * @param fileName 文件名
      * @return 文件访问地址
      * @throws Exception 文件不存在
      */
-    Img storeImageAPI(String project, File imgFile, String fileName) throws Exception;
+    Img storeImage(@Nullable String path, String project, File imgFile, String fileName) throws Exception;
 
     /**
      * 读取图片

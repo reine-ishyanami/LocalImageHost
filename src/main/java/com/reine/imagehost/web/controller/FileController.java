@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,10 +30,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/${web.base.path.image}")
 @Tag(name = "图片操作")
-@RequiredArgsConstructor
 public class FileController {
 
     private final FileService fileService;
+
+    public FileController(@Qualifier("fileServiceApi") FileService fileService) {
+        this.fileService = fileService;
+    }
 
     /**
      * 查询已上传的所有图片
@@ -79,7 +82,7 @@ public class FileController {
             if (filename == null || filename.isEmpty()) {
                 filename = imgFile.getOriginalFilename();
             }
-            img = fileService.storeImageAPI(project, file, filename);
+            img = fileService.storeImage(null, project, file, filename);
         } catch (Exception e) {
             return Result.fail("上传失败");
         }

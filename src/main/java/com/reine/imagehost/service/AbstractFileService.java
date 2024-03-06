@@ -8,14 +8,11 @@ import com.reine.imagehost.mapper.ImgMapper;
 import com.reine.imagehost.utils.AsyncTask;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Cleanup;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -24,19 +21,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
+ * 抽象服务，封装多个服务之间相同的操作
+ *
  * @author reine
- * 2022/6/30 9:24
+ * 2024/3/6 12:17
  */
-@Service
+@Component
 @Slf4j
-@Transactional(rollbackFor = Exception.class)
-@RequiredArgsConstructor
-public class FileServiceImpl implements FileService {
-
-    @Value("${local.store}")
-    private String localStore;
+public abstract class AbstractFileService implements FileService {
 
     @Value("${server.port}")
     private Integer port;
@@ -44,49 +37,14 @@ public class FileServiceImpl implements FileService {
     @Value("${web.base.path.image}")
     private String webBasePath;
 
-    private final ImgMapper imgMapper;
+    protected final ImgMapper imgMapper;
 
-    @Override
-    public Img storeImageGUI(String path, String project, String name, File imgFile) throws Exception {
-        String fileName = StringUtils.isBlank(name) ? imgFile.getName() : name;
-        String storePath = path + File.separator + project;
-        // 拼接文件路径
-        File file = createFile(project, fileName, storePath);
-        int i = imgFile.getPath().indexOf(":");
-        String realpath = imgFile.getPath().substring(i + 2);
-        return copyFileAndGetUrl(project, fileName, file, realpath);
-    }
 
-    @Override
-    public Img storeImageAPI(String project, File imgFile, String fileName) throws Exception {
-        String storePath = localStore + File.separator + project;
-        File file = createFile(project, fileName, storePath);
-        String realpath = imgFile.getAbsolutePath();
-        return copyFileAndGetUrl(project, fileName, file, realpath);
-    }
+    protected final AsyncTask task;
 
-    /**
-     * 保存文件已经返回文件存储信息
-     */
-    private Img copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
-        @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(realpath));
-        @Cleanup FileOutputStream outputStream = new FileOutputStream(file);
-        inputStream.transferTo(outputStream);
-        Img img = new Img();
-        img.setProject(project);
-        img.setName(fileName);
-        return img;
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private File createFile(String project, String fileName, String storePath) throws Exception {
-        File dir = new File(storePath);
-        File file = Path.of(storePath, fileName).toFile();
-        if (uploadImage(file, project, fileName)) {
-            throw new Exception("插入数据库失败");
-        }
-        if (!dir.exists()) dir.mkdirs();
-        return file;
+    public AbstractFileService(ImgMapper imgMapper, AsyncTask task) {
+        this.imgMapper = imgMapper;
+        this.task = task;
     }
 
     @Override
@@ -114,7 +72,6 @@ public class FileServiceImpl implements FileService {
         return true;
     }
 
-    private final AsyncTask task;
 
     @Override
     public String deleteImage(String project, String imgName) {
@@ -140,6 +97,18 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<Image> queryImageList(String id, String project, String name) {
         return imgMapper.queryImageListByIdAndProjectAndName(id, project, name);
+    }
+
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    protected File createFile(String project, String fileName, String storePath) throws Exception {
+        File dir = new File(storePath);
+        File file = Path.of(storePath, fileName).toFile();
+        if (uploadImage(file, project, fileName)) {
+            throw new Exception("插入数据库失败");
+        }
+        if (!dir.exists()) dir.mkdirs();
+        return file;
     }
 
     /**
@@ -170,6 +139,20 @@ public class FileServiceImpl implements FileService {
     }
 
     /**
+     * 保存文件已经返回文件存储信息
+     */
+    protected Img copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
+        @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(realpath));
+        @Cleanup FileOutputStream outputStream = new FileOutputStream(file);
+        inputStream.transferTo(outputStream);
+        Img img = new Img();
+        img.setProject(project);
+        img.setName(fileName);
+        return img;
+    }
+
+
+    /**
      * 获取图片路径
      *
      * @param project  项目名
@@ -191,4 +174,5 @@ public class FileServiceImpl implements FileService {
         Integer integer = imgMapper.deleteImg(project, fileName);
         return integer > 0 ? null : "图片数据不存在";
     }
+
 }
