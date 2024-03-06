@@ -7,11 +7,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TableCell;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.StageStyle;
-
-import java.util.Objects;
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
  * @author reine
@@ -30,15 +28,9 @@ public class DelButton extends TableCell<Image, Void> {
         if (empty) {
             setGraphic(null);
         } else {
-            BorderPane graphic = new BorderPane();
-            javafx.scene.image.ImageView imageView = new ImageView(
-                    new javafx.scene.image.Image(Objects.requireNonNull(getClass().getResource("/image/del.png")).toString())
-            );
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(15);
+            FontIcon imageView = new FontIcon(AntDesignIconsOutlined.DELETE);
             imageView.setPickOnBounds(true);
-            graphic.setCenter(imageView);
-            setGraphic(graphic);
+            setGraphic(imageView);
             imageView.setOnMouseClicked(e -> {
                 Dialog<ButtonType> dialog = new Dialog<>();
                 dialog.initStyle(StageStyle.UNDECORATED);
