@@ -7,20 +7,20 @@
         DELETE
         FROM "imgUrl"
         WHERE project = #{project,jdbcType=VARCHAR}
-          and name = #{name,jdbcType=VARCHAR}
+          AND name = #{name,jdbcType=VARCHAR}
     </delete>
     <select id="getPath" resultType="java.lang.String">
         SELECT path
         FROM "imgUrl"
         WHERE project = #{project,jdbcType=VARCHAR}
-          and name = #{name,jdbcType=VARCHAR}
+          AND name = #{name,jdbcType=VARCHAR}
     </select>
     <select id="listImg" resultType="com.reine.imagehost.entity.Image">
         SELECT *
         FROM "imgUrl"
         <where>
             <if test="project != null and project != ''">
-                and project = #{project,jdbcType=VARCHAR}
+                AND project = #{project,jdbcType=VARCHAR}
             </if>
         </where>
     </select>
@@ -29,13 +29,13 @@
         FROM "imgUrl"
         <where>
             <if test="id != null and id != ''">
-                and id = #{id,jdbcType=INTEGER}
+                AND id = #{id,jdbcType=INTEGER}
             </if>
             <if test="project != null and project != ''">
-                and project like '%' || #{project,jdbcType=VARCHAR} || '%'
+                AND project LIKE '%' || #{project,jdbcType=VARCHAR} || '%'
             </if>
             <if test="name != null and name != ''">
-                and name like '%' || #{name,jdbcType=VARCHAR} || '%'
+                AND name LIKE '%' || #{name,jdbcType=VARCHAR} || '%'
             </if>
         </where>
     </select>

@@ -24,10 +24,10 @@ public class LocalImageHostApplication {
             }
         }, () -> {
             try (Scanner scanner = new Scanner(System.in)) {
-                System.out.print("是否启动图形界面y/n（默认n）: ");
+                System.out.print("是否启动图形界面y/N: ");
                 inputLoop:
                 while (true) {
-                    switch (scanner.nextLine()) {
+                    switch (scanner.nextLine().trim()) {
                         case "", "n", "N" -> {
                             log.info("Running in Terminal mode");
                             SpringApplication.run(LocalImageHostApplication.class, args);
@@ -38,7 +38,7 @@ public class LocalImageHostApplication {
                             AppUI.main(args);
                             break inputLoop;
                         }
-                        default -> System.out.print("输入有误，请重新选择是否启动图形界面y/n（默认n）: ");
+                        default -> System.out.print("输入有误，请重新选择是否启动图形界面y/N: ");
                     }
                 }
             }
