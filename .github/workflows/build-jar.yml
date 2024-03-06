@@ -21,9 +21,15 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package -Pdetach --file pom.xml
-      - name: Rename Jar
-        run: |
-          mv ./target/LocalImageHost-${{ github.ref }}.jar ./target/LocalImageHost-${{ github.ref }}-${{ matrix.os }}.jar
+      - name: Rename Jar Windows
+        if: ${{ matrix.os == 'windows' }}
+        run: .github/scripts/windows.ps1
+      - name: Rename Jar Ubuntu
+        if: ${{ matrix.os == 'ubuntu' }}
+        run: bash .github/scripts/ubuntu.sh
+      - name: Rename Jar Macos
+        if: ${{ matrix.os == 'macos' }}
+        run: bash .github/scripts/macos.sh
       - name: Upload Jar as an artifact
         uses: actions/upload-artifact@v4
         with:
@@ -33,18 +39,19 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: build-jar
+    permissions:
+      contents: write
     steps:
       - name: Checkout the source
         uses: actions/checkout@v3
-
-      - name: Load artifact all
-        uses: actions/download-artifact@v3
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
         with:
           path: product
-          pattern: LocalImageHost-${{ matrix.os }}
+          pattern: LocalImageHost-*
           merge-multiple: true
-      - name: list directory
-        run: ls -R my-artifact
+      - name: List Directory
+        run: ls -R product
       - name: Upload Release
         uses: softprops/action-gh-release@v1
         env:
