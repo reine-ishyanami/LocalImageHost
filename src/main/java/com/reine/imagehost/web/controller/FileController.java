@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +41,7 @@ public class FileController {
      * @param project 项目名称
      * @return
      */
-    @GetMapping("/list")
+    @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "查询已上传的所有图片")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", in = ParameterIn.QUERY)
@@ -60,7 +61,7 @@ public class FileController {
      * @param filename 文件名
      * @return 成功或失败信息
      */
-    @PostMapping("/{project}")
+    @PostMapping(value = "/{project}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "图片上传")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
@@ -92,7 +93,7 @@ public class FileController {
      * @param imgName 图片名称
      * @return 成功或失败信息
      */
-    @GetMapping("/{project}/{imgName}")
+    @GetMapping(value = "/{project}/{imgName}")
     @Operation(summary = "图片读取")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),
@@ -105,8 +106,10 @@ public class FileController {
     ) {
         boolean flag = fileService.showImage(project, imgName, response);
         if (flag) {
-            return Result.ok("图片展示成功");
+            // 如果发现图片，则不返回JSON数据
+            return null;
         } else {
+            response.addHeader("content-type", MediaType.APPLICATION_JSON_VALUE);
             return Result.fail("图片展示失败");
         }
     }
@@ -118,7 +121,7 @@ public class FileController {
      * @param imgName 图片名称
      * @return 成功或失败信息
      */
-    @DeleteMapping("/{project}/{imgName}")
+    @DeleteMapping(value = "/{project}/{imgName}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "删除图片")
     @Parameters({
             @Parameter(name = "project", description = "项目名称", required = true, in = ParameterIn.PATH),

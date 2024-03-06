@@ -1,6 +1,6 @@
 # 文件存储路径
 local:
-  store: E:/pic-bed
+  store: D:/Source/PicBed
 # 日志级别
 logging:
   level:

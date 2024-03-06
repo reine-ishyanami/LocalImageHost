@@ -17,6 +17,7 @@ public class AsyncTask {
 
     @Async
     public void deleteImageInStorage(String filePath) {
+
         try {
             if (filePath != null) {
                 Files.deleteIfExists(Path.of(filePath));

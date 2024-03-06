@@ -29,7 +29,6 @@ spring:
   threads:
     virtual:
       enabled: true
-
 # web
 web:
   base:

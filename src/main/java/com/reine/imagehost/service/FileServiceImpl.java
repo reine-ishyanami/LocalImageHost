@@ -1,17 +1,19 @@
 package com.reine.imagehost.service;
 
+import cn.hutool.core.io.FileTypeUtil;
 import com.reine.imagehost.entity.Image;
 import com.reine.imagehost.entity.ImageWithUrl;
 import com.reine.imagehost.entity.Img;
 import com.reine.imagehost.mapper.ImgMapper;
 import com.reine.imagehost.utils.AsyncTask;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,15 +69,9 @@ public class FileServiceImpl implements FileService {
      * 保存文件已经返回文件存储信息
      */
     private Img copyFileAndGetUrl(String project, String fileName, File file, String realpath) throws Exception {
-        try (
-                InputStream inputStream = Files.newInputStream(Paths.get(realpath));
-                FileOutputStream outputStream = new FileOutputStream(file)
-        ) {
-            Streams.copy(inputStream, outputStream, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new Exception("写入文件失败");
-        }
+        @Cleanup InputStream inputStream = Files.newInputStream(Paths.get(realpath));
+        @Cleanup FileOutputStream outputStream = new FileOutputStream(file);
+        inputStream.transferTo(outputStream);
         Img img = new Img();
         img.setProject(project);
         img.setName(fileName);
@@ -96,11 +92,21 @@ public class FileServiceImpl implements FileService {
     @Override
     public boolean showImage(String project, String imgName, HttpServletResponse response) {
         String filePath = getPath(project, imgName);
-        try (
-                FileInputStream inputStream = new FileInputStream(filePath);
-                OutputStream outputStream = response.getOutputStream()
-        ) {
-            Streams.copy(inputStream, outputStream, false);
+        try {
+            @Cleanup FileInputStream fileInputStream = new FileInputStream(filePath);
+            // 使用ByteArrayInputStream包装，以实现reset()操作
+            @Cleanup ByteArrayInputStream inputStream = new ByteArrayInputStream(fileInputStream.readAllBytes());
+            String file_type = FileTypeUtil.getType(inputStream);
+            switch (file_type) {
+                case "gif", "GIF" -> response.addHeader("content-type", MediaType.IMAGE_GIF_VALUE);
+                case "jpg", "jpeg", "JPG" -> response.addHeader("content-type", MediaType.IMAGE_JPEG_VALUE);
+                case "png", "PNG" -> response.addHeader("content-type", MediaType.IMAGE_PNG_VALUE);
+                case null, default -> {
+                }
+            }
+            inputStream.reset();
+            @Cleanup OutputStream outputStream = response.getOutputStream();
+            inputStream.transferTo(outputStream);
         } catch (IOException | NullPointerException e) {
             log.error("文件不存在");
             return false;
